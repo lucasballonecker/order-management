@@ -1,10 +1,16 @@
 package com.github.lucasballonecker.ordermanagement.domain.user;
 
-import com.github.lucasballonecker.ordermanagement.domain.shared.Role;
+import com.github.lucasballonecker.ordermanagement.shared.enums.Role;
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class User {
 
     @Id

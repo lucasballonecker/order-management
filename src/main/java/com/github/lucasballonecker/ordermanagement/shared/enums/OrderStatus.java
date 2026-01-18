@@ -1,4 +1,4 @@
-package com.github.lucasballonecker.ordermanagement.domain.shared;
+package com.github.lucasballonecker.ordermanagement.shared.enums;
 
 public enum OrderStatus {
     CREATED,

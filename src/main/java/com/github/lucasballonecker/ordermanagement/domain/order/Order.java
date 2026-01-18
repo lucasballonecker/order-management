@@ -1,14 +1,20 @@
 package com.github.lucasballonecker.ordermanagement.domain.order;
 
 import com.github.lucasballonecker.ordermanagement.domain.user.User;
-import com.github.lucasballonecker.ordermanagement.domain.shared.OrderStatus;
+import com.github.lucasballonecker.ordermanagement.shared.enums.OrderStatus;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
 @Table(name = "orders")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

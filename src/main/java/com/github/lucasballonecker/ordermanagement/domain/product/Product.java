@@ -1,11 +1,17 @@
 package com.github.lucasballonecker.ordermanagement.domain.product;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Product {
 
     @Id
