@@ -4,6 +4,7 @@ import com.github.lucasballonecker.ordermanagement.domain.product.Product;
 import com.github.lucasballonecker.ordermanagement.dto.product.ProductRequest;
 import com.github.lucasballonecker.ordermanagement.dto.product.ProductResponse;
 import com.github.lucasballonecker.ordermanagement.repository.ProductRepository;
+import com.github.lucasballonecker.ordermanagement.shared.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,22 +29,21 @@ public class ProductService {
     }
 
     public List<ProductResponse> findAllActive() {
-        return repository.findAll().stream()
-                .filter(Product::isActive)
+        return repository.findByActiveTrue().stream()
                 .map(this::toResponse)
                 .toList();
     }
 
     public ProductResponse findById(Long id) {
         Product product = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found"));
 
         return toResponse(product);
     }
 
     public void deactivate(Long id) {
         Product product = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found"));
 
         product.setActive(false);
         repository.save(product);
