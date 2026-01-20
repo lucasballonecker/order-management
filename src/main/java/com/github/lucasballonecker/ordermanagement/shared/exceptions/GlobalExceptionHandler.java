@@ -29,4 +29,10 @@ public class GlobalExceptionHandler {
                         Collectors.mapping(FieldError::getDefaultMessage, Collectors.toList())
                 ));
     }
+
+    @ExceptionHandler(BusinessException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleBusiness(BusinessException ex) {
+        return Map.of("error", ex.getMessage());
+    }
 }
