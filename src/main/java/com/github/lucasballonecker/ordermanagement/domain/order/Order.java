@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -29,4 +30,6 @@ public class Order {
     private BigDecimal total;
     @Column(nullable = false)
     private Instant createdAt = Instant.now();
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> items;
 }
