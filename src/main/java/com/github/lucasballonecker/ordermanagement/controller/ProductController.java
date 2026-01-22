@@ -5,6 +5,7 @@ import com.github.lucasballonecker.ordermanagement.dto.product.ProductResponse;
 import com.github.lucasballonecker.ordermanagement.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,22 +21,26 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public ProductResponse create(@Valid @RequestBody ProductRequest request) {
         return service.create(request);
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public List<ProductResponse> findAllActive() {
         return service.findAllActive();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ProductResponse findById(@PathVariable Long id) {
         return service.findById(id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
     public void deactivate(@PathVariable Long id) {
         service.deactivate(id);
     }

@@ -1,6 +1,5 @@
 package com.github.lucasballonecker.ordermanagement.service;
 
-import com.github.lucasballonecker.ordermanagement.config.TestSecurityConfig;
 import com.github.lucasballonecker.ordermanagement.domain.product.Product;
 import com.github.lucasballonecker.ordermanagement.dto.product.ProductRequest;
 import com.github.lucasballonecker.ordermanagement.dto.product.ProductResponse;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
@@ -22,7 +20,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ActiveProfiles("test")
-@Import(TestSecurityConfig.class)
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
 
