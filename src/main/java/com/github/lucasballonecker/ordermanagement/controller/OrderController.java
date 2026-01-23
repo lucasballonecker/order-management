@@ -3,6 +3,7 @@ package com.github.lucasballonecker.ordermanagement.controller;
 
 import com.github.lucasballonecker.ordermanagement.dto.order.CreateOrderRequest;
 import com.github.lucasballonecker.ordermanagement.dto.order.OrderResponse;
+import com.github.lucasballonecker.ordermanagement.dto.order.UpdateOrderStatusRequest;
 import com.github.lucasballonecker.ordermanagement.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -48,6 +49,13 @@ public class OrderController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public OrderResponse findById(@PathVariable Long id) {
         return service.findById(id);
+    }
+
+    @PatchMapping("/{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateStatus(@PathVariable Long id, @Valid @RequestBody UpdateOrderStatusRequest request) {
+        service.updateStatus(id, request);
     }
 }
 

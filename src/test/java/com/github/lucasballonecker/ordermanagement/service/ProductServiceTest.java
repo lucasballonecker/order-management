@@ -6,11 +6,11 @@ import com.github.lucasballonecker.ordermanagement.dto.product.ProductResponse;
 import com.github.lucasballonecker.ordermanagement.repository.ProductRepository;
 import com.github.lucasballonecker.ordermanagement.shared.exceptions.ResourceNotFoundException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
 
@@ -30,25 +29,22 @@ public class ProductServiceTest {
     @InjectMocks
     private ProductService service;
 
+    private Product testProduct;
+    private Product testProduct2;
+    private ProductRequest testProductRequest;
+
+    @BeforeEach
+    void setUp() {
+        testProduct = new Product(1L, "Notebook", "Dell", new BigDecimal("4500"), true);
+        testProduct2 = new Product(2L, "Mouse", "Logitech", new BigDecimal("150"), true);
+        testProductRequest = new ProductRequest("Notebook", "Dell", new BigDecimal("4500"));
+    }
+
     @Test
     void shouldCreateProduct() {
-        ProductRequest request = new ProductRequest(
-                "Notebook",
-                "Dell",
-                new BigDecimal("4500")
-        );
+        when(repository.save(any(Product.class))).thenReturn(testProduct);
 
-        Product savedProduct = new Product(
-                1L,
-                "Notebook",
-                "Dell",
-                new BigDecimal("4500"),
-                true
-        );
-
-        when(repository.save(any(Product.class))).thenReturn(savedProduct);
-
-        ProductResponse response = service.create(request);
+        ProductResponse response = service.create(testProductRequest);
 
         assertNotNull(response);
         assertEquals("Notebook", response.name());
@@ -65,10 +61,7 @@ public class ProductServiceTest {
 
     @Test
     void shouldFindAllActiveProducts() {
-        List<Product> activeProducts = List.of(
-                new Product(1L, "Notebook", "Dell", new BigDecimal("4500"), true),
-                new Product(2L, "Mouse", "Logitech", new BigDecimal("150"), true)
-        );
+        List<Product> activeProducts = List.of(testProduct, testProduct2);
 
         when(repository.findByActiveTrue()).thenReturn(activeProducts);
 
@@ -84,14 +77,12 @@ public class ProductServiceTest {
 
     @Test
     void shouldDeactivateProduct() {
-        Product product = new Product(1L, "Notebook", "Dell", new BigDecimal("4500"), true);
-        
-        when(repository.findById(1L)).thenReturn(Optional.of(product));
-        when(repository.save(any(Product.class))).thenReturn(product);
+        when(repository.findById(1L)).thenReturn(Optional.of(testProduct));
+        when(repository.save(any(Product.class))).thenReturn(testProduct);
 
         service.deactivate(1L);
 
-        assertFalse(product.isActive());
+        assertFalse(testProduct.isActive());
     }
 
     @Test

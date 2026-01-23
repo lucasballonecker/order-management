@@ -4,10 +4,7 @@ import com.github.lucasballonecker.ordermanagement.domain.order.Order;
 import com.github.lucasballonecker.ordermanagement.domain.order.OrderItem;
 import com.github.lucasballonecker.ordermanagement.domain.product.Product;
 import com.github.lucasballonecker.ordermanagement.domain.user.User;
-import com.github.lucasballonecker.ordermanagement.dto.order.CreateOrderRequest;
-import com.github.lucasballonecker.ordermanagement.dto.order.OrderItemRequest;
-import com.github.lucasballonecker.ordermanagement.dto.order.OrderItemResponse;
-import com.github.lucasballonecker.ordermanagement.dto.order.OrderResponse;
+import com.github.lucasballonecker.ordermanagement.dto.order.*;
 import com.github.lucasballonecker.ordermanagement.repository.OrderRepository;
 import com.github.lucasballonecker.ordermanagement.repository.ProductRepository;
 import com.github.lucasballonecker.ordermanagement.repository.UserRepository;
@@ -143,6 +140,13 @@ public class OrderService {
                                 ))
                         .toList()
         );
+    }
+
+    @Transactional
+    public void updateStatus(Long id, UpdateOrderStatusRequest request) {
+        Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+
+        order.setStatus(request.status());
     }
 }
 

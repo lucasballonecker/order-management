@@ -25,7 +25,7 @@ public class Order {
     private User user;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private OrderStatus status;
+    private OrderStatus status = OrderStatus.CREATED;
     @Column(nullable = false)
     private BigDecimal total;
     @Column(nullable = false)

@@ -4,6 +4,7 @@ import com.github.lucasballonecker.ordermanagement.dto.product.ProductResponse;
 import com.github.lucasballonecker.ordermanagement.service.ProductService;
 import com.github.lucasballonecker.ordermanagement.shared.exceptions.ResourceNotFoundException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,28 +36,46 @@ public class ProductControllerTest {
     @MockitoBean
     private ProductService service;
 
-    @Test
-    @WithMockUser(roles = "ADMIN")
-    void shouldCreateProductWithAdminRole() throws Exception {
-        ProductResponse response = new ProductResponse(
+    private ProductResponse testProductResponse;
+
+    @BeforeEach
+    void setUp() {
+        testProductResponse = new ProductResponse(
                 1L,
                 "Mouse",
                 "Gamer",
                 new BigDecimal("150"),
                 true
         );
+    }
 
-        when(service.create(any())).thenReturn(response);
+    private String validProductRequestJson() {
+        return """
+                {
+                  "name": "Mouse",
+                  "description": "Gamer",
+                  "price": 150
+                }
+                """;
+    }
+
+    private String invalidProductRequestJson() {
+        return """
+                {
+                  "name": "",
+                  "price": -10
+                }
+                """;
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldCreateProductWithAdminRole() throws Exception {
+        when(service.create(any())).thenReturn(testProductResponse);
 
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                  "name": "Mouse",
-                                  "description": "Gamer",
-                                  "price": 150
-                                }
-                                """))
+                        .content(validProductRequestJson()))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("Mouse"))
                 .andExpect(jsonPath("$.active").value(true));
@@ -67,13 +86,7 @@ public class ProductControllerTest {
     void shouldForbidCreateProductWithUserRole() throws Exception {
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                  "name": "Mouse",
-                                  "description": "Gamer",
-                                  "price": 150
-                                }
-                                """))
+                        .content(validProductRequestJson()))
                 .andExpect(status().isForbidden());
     }
 
@@ -81,13 +94,7 @@ public class ProductControllerTest {
     void shouldReturnUnauthorizedWhenNotAuthenticated() throws Exception {
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                  "name": "Mouse",
-                                  "description": "Gamer",
-                                  "price": 150
-                                }
-                                """))
+                        .content(validProductRequestJson()))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -96,12 +103,7 @@ public class ProductControllerTest {
     void shouldReturnBadRequestWhenInvalidBody() throws Exception {
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                  "name": "",
-                                  "price": -10
-                                }
-                                """))
+                        .content(invalidProductRequestJson()))
                 .andExpect(status().isBadRequest());
     }
 
@@ -118,15 +120,15 @@ public class ProductControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void shouldFindProductById() throws Exception {
-        ProductResponse response = new ProductResponse(
+        ProductResponse keyboardResponse = new ProductResponse(
                 1L,
                 "Teclado Mecânico",
                 "Mecânico RGB",
                 new BigDecimal("250"),
                 true
         );
-
-        when(service.findById(1L)).thenReturn(response);
+        
+        when(service.findById(1L)).thenReturn(keyboardResponse);
 
         mockMvc.perform(get("/products/1"))
                 .andExpect(status().isOk())
