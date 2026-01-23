@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,6 +61,45 @@ public class ProductServiceTest {
 
         assertThrows(ResourceNotFoundException.class,
                 () -> service.findById(99L));
+    }
+
+    @Test
+    void shouldFindAllActiveProducts() {
+        List<Product> activeProducts = List.of(
+                new Product(1L, "Notebook", "Dell", new BigDecimal("4500"), true),
+                new Product(2L, "Mouse", "Logitech", new BigDecimal("150"), true)
+        );
+
+        when(repository.findByActiveTrue()).thenReturn(activeProducts);
+
+        List<ProductResponse> responses = service.findAllActive();
+
+        assertNotNull(responses);
+        assertEquals(2, responses.size());
+        assertEquals("Notebook", responses.get(0).name());
+        assertEquals("Mouse", responses.get(1).name());
+        assertTrue(responses.get(0).active());
+        assertTrue(responses.get(1).active());
+    }
+
+    @Test
+    void shouldDeactivateProduct() {
+        Product product = new Product(1L, "Notebook", "Dell", new BigDecimal("4500"), true);
+        
+        when(repository.findById(1L)).thenReturn(Optional.of(product));
+        when(repository.save(any(Product.class))).thenReturn(product);
+
+        service.deactivate(1L);
+
+        assertFalse(product.isActive());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDeactivatingNonExistentProduct() {
+        when(repository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> service.deactivate(99L));
     }
 }
 
