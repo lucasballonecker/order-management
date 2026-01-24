@@ -6,11 +6,11 @@ import com.github.lucasballonecker.ordermanagement.dto.order.OrderResponse;
 import com.github.lucasballonecker.ordermanagement.dto.order.UpdateOrderStatusRequest;
 import com.github.lucasballonecker.ordermanagement.service.OrderService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
@@ -33,15 +33,15 @@ public class OrderController {
 
     @GetMapping("/me")
     @PreAuthorize("hasRole('USER')")
-    public List<OrderResponse> findMyOrders() {
-        return service.findMyOrders();
+    public Page<OrderResponse> findMyOrders(Pageable pageable) {
+        return service.findMyOrders(pageable);
     }
 
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public List<OrderResponse> findAll() {
-        return service.findAll();
+    public Page<OrderResponse> findAll(Pageable pageable) {
+        return service.findAll(pageable);
     }
 
 

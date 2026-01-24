@@ -5,9 +5,9 @@ import com.github.lucasballonecker.ordermanagement.dto.product.ProductRequest;
 import com.github.lucasballonecker.ordermanagement.dto.product.ProductResponse;
 import com.github.lucasballonecker.ordermanagement.repository.ProductRepository;
 import com.github.lucasballonecker.ordermanagement.shared.exceptions.ResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ProductService {
@@ -28,10 +28,9 @@ public class ProductService {
         return toResponse(saved);
     }
 
-    public List<ProductResponse> findAllActive() {
-        return repository.findByActiveTrue().stream()
-                .map(this::toResponse)
-                .toList();
+    public Page<ProductResponse> findAllActive(Pageable pageable) {
+        return repository.findByActiveTrue(pageable)
+                .map(this::toResponse);
     }
 
     public ProductResponse findById(Long id) {

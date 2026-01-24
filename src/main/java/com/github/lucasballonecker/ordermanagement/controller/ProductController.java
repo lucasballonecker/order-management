@@ -4,6 +4,8 @@ import com.github.lucasballonecker.ordermanagement.dto.product.ProductRequest;
 import com.github.lucasballonecker.ordermanagement.dto.product.ProductResponse;
 import com.github.lucasballonecker.ordermanagement.service.ProductService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +30,8 @@ public class ProductController {
 
     @GetMapping
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public List<ProductResponse> findAllActive() {
-        return service.findAllActive();
+    public Page<ProductResponse> findAllActive(Pageable pageable) {
+        return service.findAllActive(pageable);
     }
 
     @GetMapping("/{id}")

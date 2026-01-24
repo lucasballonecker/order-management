@@ -12,6 +12,8 @@ import com.github.lucasballonecker.ordermanagement.shared.enums.OrderStatus;
 import com.github.lucasballonecker.ordermanagement.shared.enums.Role;
 import com.github.lucasballonecker.ordermanagement.shared.exceptions.ResourceNotFoundException;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -78,21 +80,17 @@ public class OrderService {
     }
 
 
-    public List<OrderResponse> findAll() {
-        return orderRepository.findAll()
-                .stream()
-                .map(this::toResponse)
-                .toList();
+    public Page<OrderResponse> findAll(Pageable pageable) {
+        return orderRepository.findAll(pageable)
+                .map(this::toResponse);
     }
 
 
-    public List<OrderResponse> findMyOrders() {
+    public Page<OrderResponse> findMyOrders(Pageable pageable) {
         User user = getAuthenticatedUser();
 
-        return orderRepository.findByUser(user)
-                .stream()
-                .map(this::toResponse)
-                .toList();
+        return orderRepository.findByUser(user, pageable)
+                .map(this::toResponse);
     }
 
 

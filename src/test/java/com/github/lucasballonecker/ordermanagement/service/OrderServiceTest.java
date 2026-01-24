@@ -25,6 +25,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -121,14 +124,15 @@ public class OrderServiceTest {
         order.setTotal(new BigDecimal("150"));
         order.setCreatedAt(Instant.now());
         order.setItems(List.of());
+        
+        Pageable pageable = mock(Pageable.class);
+        when(orderRepository.findAll(pageable)).thenReturn(new PageImpl<>(List.of(order)));
 
-        when(orderRepository.findAll()).thenReturn(List.of(order));
-
-        List<OrderResponse> responses = service.findAll();
+        Page<OrderResponse> responses = service.findAll(pageable);
 
         assertNotNull(responses);
-        assertEquals(1, responses.size());
-        assertEquals("user@example.com", responses.get(0).userEmail());
+        assertEquals(1, responses.getContent().size());
+        assertEquals("user@example.com", responses.getContent().get(0).userEmail());
     }
 
     @Test
@@ -143,15 +147,16 @@ public class OrderServiceTest {
         order.setTotal(new BigDecimal("150"));
         order.setCreatedAt(Instant.now());
         order.setItems(List.of());
-
+        
+        Pageable pageable = mock(Pageable.class);
         when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(testUser));
-        when(orderRepository.findByUser(testUser)).thenReturn(List.of(order));
+        when(orderRepository.findByUser(testUser, pageable)).thenReturn(new PageImpl<>(List.of(order)));
 
-        List<OrderResponse> responses = service.findMyOrders();
+        Page<OrderResponse> responses = service.findMyOrders(pageable);
 
         assertNotNull(responses);
-        assertEquals(1, responses.size());
-        assertEquals("user@example.com", responses.get(0).userEmail());
+        assertEquals(1, responses.getContent().size());
+        assertEquals("user@example.com", responses.getContent().get(0).userEmail());
     }
 
     @Test

@@ -11,7 +11,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
+import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
@@ -62,17 +66,18 @@ public class ProductServiceTest {
     @Test
     public void shouldFindAllActiveProducts() {
         List<Product> activeProducts = List.of(testProduct, testProduct2);
+        Pageable pageable = mock(Pageable.class);
 
-        when(repository.findByActiveTrue()).thenReturn(activeProducts);
+        when(repository.findByActiveTrue(pageable)).thenReturn(new PageImpl<>(activeProducts));
 
-        List<ProductResponse> responses = service.findAllActive();
+        Page<ProductResponse> responses = service.findAllActive(pageable);
 
         assertNotNull(responses);
-        assertEquals(2, responses.size());
-        assertEquals("Notebook", responses.get(0).name());
-        assertEquals("Mouse", responses.get(1).name());
-        assertTrue(responses.get(0).active());
-        assertTrue(responses.get(1).active());
+        assertEquals(2, responses.getContent().size());
+        assertEquals("Notebook", responses.getContent().get(0).name());
+        assertEquals("Mouse", responses.getContent().get(1).name());
+        assertTrue(responses.getContent().get(0).active());
+        assertTrue(responses.getContent().get(1).active());
     }
 
     @Test
