@@ -55,7 +55,7 @@ public class OrderServiceTest {
     private Product testProduct;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         testUser = new User(1L, "User", "user@example.com", "password", Role.USER);
         testProduct = new Product(1L, "Mouse", "Gamer", new BigDecimal("150"), true);
     }
@@ -70,7 +70,7 @@ public class OrderServiceTest {
 
     @Test
     @WithMockUser(username = "user@example.com")
-    void shouldCreateOrder() {
+    public void shouldCreateOrder() {
         setupSecurityContext("user@example.com");
 
         CreateOrderRequest request = new CreateOrderRequest(
@@ -99,7 +99,7 @@ public class OrderServiceTest {
 
     @Test
     @WithMockUser(username = "user@example.com")
-    void shouldThrowExceptionWhenCreatingOrderWithNonExistentProduct() {
+    public void shouldThrowExceptionWhenCreatingOrderWithNonExistentProduct() {
         setupSecurityContext("user@example.com");
 
         CreateOrderRequest request = new CreateOrderRequest(
@@ -113,7 +113,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    void shouldFindAllOrders() {
+    public void shouldFindAllOrders() {
         Order order = new Order();
         order.setId(1L);
         order.setUser(testUser);
@@ -133,7 +133,7 @@ public class OrderServiceTest {
 
     @Test
     @WithMockUser(username = "user@example.com")
-    void shouldFindMyOrders() {
+    public void shouldFindMyOrders() {
         setupSecurityContext("user@example.com");
 
         Order order = new Order();
@@ -156,7 +156,7 @@ public class OrderServiceTest {
 
     @Test
     @WithMockUser(username = "admin@example.com")
-    void shouldFindOrderByIdWithAdminRole() {
+    public void shouldFindOrderByIdWithAdminRole() {
         setupSecurityContext("admin@example.com");
 
         User admin = new User(1L, "Admin", "admin@example.com", "password", Role.ADMIN);
@@ -180,7 +180,7 @@ public class OrderServiceTest {
 
     @Test
     @WithMockUser(username = "user@example.com")
-    void shouldFindOrderByIdWhenUserOwnsOrder() {
+    public void shouldFindOrderByIdWhenUserOwnsOrder() {
         setupSecurityContext("user@example.com");
 
         Order order = new Order();
@@ -202,7 +202,7 @@ public class OrderServiceTest {
 
     @Test
     @WithMockUser(username = "user@example.com")
-    void shouldThrowExceptionWhenUserTriesToAccessOtherUsersOrder() {
+    public void shouldThrowExceptionWhenUserTriesToAccessOtherUsersOrder() {
         setupSecurityContext("user@example.com");
 
         User otherUser = new User(2L, "Other User", "other@example.com", "password", Role.USER);
@@ -222,14 +222,14 @@ public class OrderServiceTest {
 
     @Test
     @WithMockUser(username = "user@example.com")
-    void shouldThrowExceptionWhenOrderNotFound() {
+    public void shouldThrowExceptionWhenOrderNotFound() {
         when(orderRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> service.findById(99L));
     }
 
     @Test
-    void shouldUpdateOrderStatus() {
+    public void shouldUpdateOrderStatus() {
         Order order = new Order();
         order.setId(1L);
         order.setStatus(OrderStatus.CREATED);
@@ -243,7 +243,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenUpdatingStatusOfNonExistentOrder() {
+    public void shouldThrowExceptionWhenUpdatingStatusOfNonExistentOrder() {
         when(orderRepository.findById(99L)).thenReturn(Optional.empty());
 
         UpdateOrderStatusRequest request = new UpdateOrderStatusRequest(OrderStatus.PAID);

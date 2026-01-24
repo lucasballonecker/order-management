@@ -34,14 +34,14 @@ public class ProductServiceTest {
     private ProductRequest testProductRequest;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         testProduct = new Product(1L, "Notebook", "Dell", new BigDecimal("4500"), true);
         testProduct2 = new Product(2L, "Mouse", "Logitech", new BigDecimal("150"), true);
         testProductRequest = new ProductRequest("Notebook", "Dell", new BigDecimal("4500"));
     }
 
     @Test
-    void shouldCreateProduct() {
+    public void shouldCreateProduct() {
         when(repository.save(any(Product.class))).thenReturn(testProduct);
 
         ProductResponse response = service.create(testProductRequest);
@@ -52,7 +52,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenProductNotFound() {
+    public void shouldThrowExceptionWhenProductNotFound() {
         when(repository.findById(99L)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
@@ -60,7 +60,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    void shouldFindAllActiveProducts() {
+    public void shouldFindAllActiveProducts() {
         List<Product> activeProducts = List.of(testProduct, testProduct2);
 
         when(repository.findByActiveTrue()).thenReturn(activeProducts);
@@ -76,7 +76,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    void shouldDeactivateProduct() {
+    public void shouldDeactivateProduct() {
         when(repository.findById(1L)).thenReturn(Optional.of(testProduct));
         when(repository.save(any(Product.class))).thenReturn(testProduct);
 
@@ -86,7 +86,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenDeactivatingNonExistentProduct() {
+    public void shouldThrowExceptionWhenDeactivatingNonExistentProduct() {
         when(repository.findById(99L)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,

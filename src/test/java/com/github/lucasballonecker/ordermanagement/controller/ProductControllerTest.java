@@ -39,7 +39,7 @@ public class ProductControllerTest {
     private ProductResponse testProductResponse;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         testProductResponse = new ProductResponse(
                 1L,
                 "Mouse",
@@ -70,7 +70,7 @@ public class ProductControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void shouldCreateProductWithAdminRole() throws Exception {
+    public void shouldCreateProductWithAdminRole() throws Exception {
         when(service.create(any())).thenReturn(testProductResponse);
 
         mockMvc.perform(post("/products")
@@ -83,7 +83,7 @@ public class ProductControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    void shouldForbidCreateProductWithUserRole() throws Exception {
+    public void shouldForbidCreateProductWithUserRole() throws Exception {
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(validProductRequestJson()))
@@ -91,7 +91,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void shouldReturnUnauthorizedWhenNotAuthenticated() throws Exception {
+    public void shouldReturnUnauthorizedWhenNotAuthenticated() throws Exception {
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(validProductRequestJson()))
@@ -100,7 +100,7 @@ public class ProductControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void shouldReturnBadRequestWhenInvalidBody() throws Exception {
+    public void shouldReturnBadRequestWhenInvalidBody() throws Exception {
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(invalidProductRequestJson()))
@@ -109,7 +109,7 @@ public class ProductControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void shouldReturnNotFoundWhenProductDoesNotExist() throws Exception {
+    public void shouldReturnNotFoundWhenProductDoesNotExist() throws Exception {
         when(service.findById(99L))
                 .thenThrow(new ResourceNotFoundException("Produto não encontrado"));
 
@@ -119,7 +119,7 @@ public class ProductControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void shouldFindProductById() throws Exception {
+    public void shouldFindProductById() throws Exception {
         ProductResponse keyboardResponse = new ProductResponse(
                 1L,
                 "Teclado Mecânico",
@@ -137,27 +137,27 @@ public class ProductControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void shouldListAllProducts() throws Exception {
+    public void shouldListAllProducts() throws Exception {
         mockMvc.perform(get("/products"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void shouldDeactivateProductWithAdminRole() throws Exception {
+    public void shouldDeactivateProductWithAdminRole() throws Exception {
         mockMvc.perform(delete("/products/1"))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     @WithMockUser(roles = "USER")
-    void shouldForbidDeactivateProductWithUserRole() throws Exception {
+    public void shouldForbidDeactivateProductWithUserRole() throws Exception {
         mockMvc.perform(delete("/products/1"))
                 .andExpect(status().isForbidden());
     }
 
     @Test
-    void shouldReturnUnauthorizedWhenDeactivateNotAuthenticated() throws Exception {
+    public void shouldReturnUnauthorizedWhenDeactivateNotAuthenticated() throws Exception {
         mockMvc.perform(delete("/products/1"))
                 .andExpect(status().isUnauthorized());
     }

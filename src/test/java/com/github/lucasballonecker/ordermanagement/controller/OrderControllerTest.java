@@ -42,7 +42,7 @@ public class OrderControllerTest {
     private OrderResponse testOrderResponse;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         testOrderResponse = new OrderResponse(
                 1L,
                 "user@example.com",
@@ -92,7 +92,7 @@ public class OrderControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    void shouldCreateOrderWithUserRole() throws Exception {
+    public void shouldCreateOrderWithUserRole() throws Exception {
         when(service.create(any())).thenReturn(testOrderResponse);
 
         mockMvc.perform(post("/orders")
@@ -105,7 +105,7 @@ public class OrderControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void shouldForbidCreateOrderWithAdminRole() throws Exception {
+    public void shouldForbidCreateOrderWithAdminRole() throws Exception {
         mockMvc.perform(post("/orders")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(validOrderRequestJson()))
@@ -113,7 +113,7 @@ public class OrderControllerTest {
     }
 
     @Test
-    void shouldReturnUnauthorizedWhenNotAuthenticated() throws Exception {
+    public void shouldReturnUnauthorizedWhenNotAuthenticated() throws Exception {
         mockMvc.perform(post("/orders")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(validOrderRequestJson()))
@@ -122,7 +122,7 @@ public class OrderControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    void shouldReturnBadRequestWhenInvalidBody() throws Exception {
+    public void shouldReturnBadRequestWhenInvalidBody() throws Exception {
         mockMvc.perform(post("/orders")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(invalidOrderRequestJson()))
@@ -131,47 +131,47 @@ public class OrderControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    void shouldFindMyOrders() throws Exception {
+    public void shouldFindMyOrders() throws Exception {
         mockMvc.perform(get("/orders/me"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void shouldForbidFindMyOrdersWithAdminRole() throws Exception {
+    public void shouldForbidFindMyOrdersWithAdminRole() throws Exception {
         mockMvc.perform(get("/orders/me"))
                 .andExpect(status().isForbidden());
     }
 
     @Test
-    void shouldReturnUnauthorizedWhenFindMyOrdersNotAuthenticated() throws Exception {
+    public void shouldReturnUnauthorizedWhenFindMyOrdersNotAuthenticated() throws Exception {
         mockMvc.perform(get("/orders/me"))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void shouldFindAllOrders() throws Exception {
+    public void shouldFindAllOrders() throws Exception {
         mockMvc.perform(get("/orders"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(roles = "USER")
-    void shouldForbidFindAllOrdersWithUserRole() throws Exception {
+    public void shouldForbidFindAllOrdersWithUserRole() throws Exception {
         mockMvc.perform(get("/orders"))
                 .andExpect(status().isForbidden());
     }
 
     @Test
-    void shouldReturnUnauthorizedWhenFindAllOrdersNotAuthenticated() throws Exception {
+    public void shouldReturnUnauthorizedWhenFindAllOrdersNotAuthenticated() throws Exception {
         mockMvc.perform(get("/orders"))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(roles = "USER")
-    void shouldFindOrderByIdWithUserRole() throws Exception {
+    public void shouldFindOrderByIdWithUserRole() throws Exception {
         when(service.findById(1L)).thenReturn(testOrderResponse);
 
         mockMvc.perform(get("/orders/1"))
@@ -181,7 +181,7 @@ public class OrderControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void shouldFindOrderByIdWithAdminRole() throws Exception {
+    public void shouldFindOrderByIdWithAdminRole() throws Exception {
         when(service.findById(1L)).thenReturn(testOrderResponse);
 
         mockMvc.perform(get("/orders/1"))
@@ -191,7 +191,7 @@ public class OrderControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    void shouldReturnNotFoundWhenOrderDoesNotExist() throws Exception {
+    public void shouldReturnNotFoundWhenOrderDoesNotExist() throws Exception {
         when(service.findById(99L))
                 .thenThrow(new ResourceNotFoundException("Order not found"));
 
@@ -200,7 +200,7 @@ public class OrderControllerTest {
     }
 
     @Test
-    void shouldReturnForbiddenWhenUserTriesToAccessOtherUsersOrder() throws Exception {
+    public void shouldReturnForbiddenWhenUserTriesToAccessOtherUsersOrder() throws Exception {
         when(service.findById(1L))
                 .thenThrow(new AccessDeniedException("You cannot access this order"));
 
@@ -210,14 +210,14 @@ public class OrderControllerTest {
     }
 
     @Test
-    void shouldReturnUnauthorizedWhenFindByIdNotAuthenticated() throws Exception {
+    public void shouldReturnUnauthorizedWhenFindByIdNotAuthenticated() throws Exception {
         mockMvc.perform(get("/orders/1"))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void shouldUpdateOrderStatusWithAdminRole() throws Exception {
+    public void shouldUpdateOrderStatusWithAdminRole() throws Exception {
         mockMvc.perform(patch("/orders/1/status")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(validUpdateStatusJson()))
@@ -226,7 +226,7 @@ public class OrderControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    void shouldForbidUpdateOrderStatusWithUserRole() throws Exception {
+    public void shouldForbidUpdateOrderStatusWithUserRole() throws Exception {
         mockMvc.perform(patch("/orders/1/status")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(validUpdateStatusJson()))
@@ -235,7 +235,7 @@ public class OrderControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    void shouldReturnForbiddenWhenUpdateStatusWithUserRole() throws Exception {
+    public void shouldReturnForbiddenWhenUpdateStatusWithUserRole() throws Exception {
         mockMvc.perform(patch("/orders/1/status")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(validUpdateStatusJson()))
@@ -244,7 +244,7 @@ public class OrderControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void shouldReturnBadRequestWhenInvalidStatus() throws Exception {
+    public void shouldReturnBadRequestWhenInvalidStatus() throws Exception {
         mockMvc.perform(patch("/orders/1/status")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(invalidStatusJson()))
