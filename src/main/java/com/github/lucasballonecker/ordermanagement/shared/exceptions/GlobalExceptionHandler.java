@@ -1,6 +1,7 @@
 package com.github.lucasballonecker.ordermanagement.shared.exceptions;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,5 +35,21 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleBusiness(BusinessException ex) {
         return Map.of("error", ex.getMessage());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleIllegalArgument(IllegalArgumentException ex) {
+        return Map.of("error", "Invalid order status: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        String message = ex.getMostSpecificCause().getMessage();
+        if (message != null && message.contains("OrderStatus")) {
+            return Map.of("error", "Invalid order status. Valid values are: CREATED, PAID, SHIPPED, DELIVERED");
+        }
+        return Map.of("error", "Invalid request body format");
     }
 }
