@@ -1,7 +1,6 @@
 package com.github.lucasballonecker.ordermanagement.dto.order;
 
-import com.github.lucasballonecker.ordermanagement.shared.enums.OrderStatus;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
-public record UpdateOrderStatusRequest(@NotNull OrderStatus status) {
+public record UpdateOrderStatusRequest(@NotBlank String status) {
 }

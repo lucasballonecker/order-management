@@ -241,7 +241,7 @@ public class OrderServiceTest {
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
 
-        UpdateOrderStatusRequest request = new UpdateOrderStatusRequest(OrderStatus.PAID);
+        UpdateOrderStatusRequest request = new UpdateOrderStatusRequest("PAID");
         service.updateStatus(1L, request);
 
         assertEquals(OrderStatus.PAID, order.getStatus());
@@ -251,7 +251,7 @@ public class OrderServiceTest {
     public void shouldThrowExceptionWhenUpdatingStatusOfNonExistentOrder() {
         when(orderRepository.findById(99L)).thenReturn(Optional.empty());
 
-        UpdateOrderStatusRequest request = new UpdateOrderStatusRequest(OrderStatus.PAID);
+        UpdateOrderStatusRequest request = new UpdateOrderStatusRequest("PAID");
 
         assertThrows(ResourceNotFoundException.class, () -> service.updateStatus(99L, request));
     }

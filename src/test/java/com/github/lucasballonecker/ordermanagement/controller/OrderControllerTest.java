@@ -21,6 +21,7 @@ import java.time.Instant;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -245,6 +246,9 @@ public class OrderControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     public void shouldReturnBadRequestWhenInvalidStatus() throws Exception {
+        doThrow(new IllegalArgumentException("Invalid order status. Valid values are: CREATED, PAID, SHIPPED, DELIVERED, CANCELLED"))
+                .when(service).updateStatus(any(Long.class), any());
+        
         mockMvc.perform(patch("/orders/1/status")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(invalidStatusJson()))

@@ -144,7 +144,12 @@ public class OrderService {
     public void updateStatus(Long id, UpdateOrderStatusRequest request) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
 
-        order.setStatus(request.status());
+        try {
+            OrderStatus status = OrderStatus.valueOf(request.status().toUpperCase());
+            order.setStatus(status);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid order status. Valid values are: CREATED, PAID, SHIPPED, DELIVERED, CANCELLED");
+        }
     }
 }
 

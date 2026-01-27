@@ -47,10 +47,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
-        String message = ex.getMostSpecificCause().getMessage();
-        if (message != null && message.contains("OrderStatus")) {
-            return Map.of("error", "Invalid order status. Valid values are: CREATED, PAID, SHIPPED, DELIVERED AND CANCELLED");
-        }
         return Map.of("error", "Invalid request body format");
     }
 
