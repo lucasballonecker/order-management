@@ -44,7 +44,7 @@ public class AuthControllerTest {
 
     private final ObjectMapper mapper = new ObjectMapper();
     private final User user = new User(1L, "John", "john@example.com", "encodedPassword", Role.USER);
-    private final Authentication auth = new UsernamePasswordAuthenticationToken("john@example.com", "password");
+    private final Authentication auth = new UsernamePasswordAuthenticationToken(user, "password", user.getAuthorities());
 
     @Test
     public void shouldLoginSuccessfully() throws Exception {
@@ -61,7 +61,8 @@ public class AuthControllerTest {
 
     @Test
     public void shouldReturnUnauthorizedWhenInvalidCredentials() throws Exception {
-        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.empty());
+        when(authManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+                .thenThrow(new org.springframework.security.authentication.BadCredentialsException("Invalid credentials"));
 
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
