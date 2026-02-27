@@ -45,7 +45,7 @@ API completa para gerenciamento de pedidos desenvolvida com Spring Boot 3.5.9 e 
 
 2. **Configure ambiente**
    ```bash
-   cp .env.example .env
+   cp backend/.env.example .env
    # Edite o arquivo .env com suas configurações
    ```
 
@@ -56,7 +56,7 @@ API completa para gerenciamento de pedidos desenvolvida com Spring Boot 3.5.9 e 
 
 4. **Ou execute localmente**
    ```bash
-   ./mvnw spring-boot:run -Dspring.profiles.active=dev
+   cd backend && ./mvnw spring-boot:run -Dspring.profiles.active=dev
    ```
 
 5. **Acesse a API**
@@ -191,7 +191,7 @@ src/main/java/com/github/lucasballonecker/ordermanagement/
 
 ```bash
 # Executar todos os testes
-./mvnw test
+cd backend && ./mvnw test
 ```
 
 **Métricas:**

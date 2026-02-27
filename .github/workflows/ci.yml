@@ -24,12 +24,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-maven-${{ hashFiles('backend/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
 
       - name: Make mvnw executable
-        run: chmod +x mvnw
+        run: chmod +x backend/mvnw
 
       - name: Run tests
-        run: ./mvnw test
+        run: cd backend && ./mvnw test
