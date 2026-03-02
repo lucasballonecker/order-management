@@ -37,6 +37,9 @@ build/
 ### Environment Variables ###
 .env
 
+### Dependencies ###
+node_modules/
+
 ### Frontend Dependencies ###
 frontend/node_modules/
 
