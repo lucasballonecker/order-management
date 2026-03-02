@@ -36,3 +36,30 @@ build/
 
 ### Environment Variables ###
 .env
+
+### Frontend Dependencies ###
+frontend/node_modules/
+
+### Frontend Environment ###
+frontend/.env
+frontend/.env.*
+*.env
+
+### Frontend Build Outputs ###
+frontend/dist/
+frontend/build/
+
+### Frontend Coverage ###
+frontend/coverage/
+
+### Frontend Logs ###
+*.log
+frontend/*.log
+
+### Frontend Cache ###
+frontend/.cache/
+frontend/.vite/
+
+### System Files ###
+.DS_Store
+Thumbs.db
