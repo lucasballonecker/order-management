@@ -3,7 +3,7 @@ import { ProtectedRoute } from '../components/ProtectedRoute';
 import { MainLayout } from '../layouts/MainLayout';
 
 
-const Login = () => <div>Login Page</div>;
+import { Login } from '../pages/Login';
 const Register = () => <div>Register Page</div>;
 const Products = () => <div>Products Page</div>;
 const Orders = () => <div>Orders Page</div>;
