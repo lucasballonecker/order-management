@@ -1,18 +1,44 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import { ProtectedRoute } from '../components/ProtectedRoute';
 
+
+const Login = () => <div>Login Page</div>;
+const Register = () => <div>Register Page</div>;
+const Products = () => <div>Products Page</div>;
+const Orders = () => <div>Orders Page</div>;
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <div>Home</div>,
-  },
-  {
     path: '/login',
-    element: <div>Login</div>,
+    element: <Login />,
   },
   {
     path: '/register',
-    element: <div>Register</div>,
+    element: <Register />,
+  },
+  
+  
+  {
+    path: '/products',
+    element: (
+      <ProtectedRoute>
+        <Products />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/orders',
+    element: (
+      <ProtectedRoute>
+        <Orders />
+      </ProtectedRoute>
+    ),
+  },
+  
+  
+  {
+    path: '/',
+    element: <Navigate to="/products" replace />,
   },
 ]);
 
