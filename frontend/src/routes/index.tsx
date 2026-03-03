@@ -4,7 +4,7 @@ import { MainLayout } from '../layouts/MainLayout';
 
 
 import { Login } from '../pages/Login';
-const Register = () => <div>Register Page</div>;
+import { Register } from '../pages/Register';
 const Products = () => <div>Products Page</div>;
 const Orders = () => <div>Orders Page</div>;
 
