@@ -1,7 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ProductService } from '../services/productService';
+import { OrderService } from '../services/orderService';
 import type { PaginationParams, PaginationResponse } from '../types/pagination';
 import type { ProductResponse } from '../types/product';
+import type { OrderItemRequest } from '../types/order';
+import { getErrorMessage } from '../utils/errorHandler';
 
 export const Products: React.FC = () => {
   const [products, setProducts] = useState<ProductResponse[]>([]);
@@ -14,6 +17,11 @@ export const Products: React.FC = () => {
     size: 10,
     sort: 'name,asc'
   });
+
+  // simple cart: map productId to quantity
+  const [cart, setCart] = useState<Record<number, number>>({});
+  const [orderError, setOrderError] = useState('');
+  const [orderSuccess, setOrderSuccess] = useState(false);
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
@@ -39,6 +47,36 @@ export const Products: React.FC = () => {
     setParams(prev => ({ ...prev, page: newPage }));
   };
 
+  const addToCart = (productId: number) => {
+    setCart(prev => ({ ...prev, [productId]: (prev[productId] || 0) + 1 }));
+  };
+
+  const removeFromCart = (productId: number) => {
+    setCart(prev => {
+      const copy = { ...prev };
+      delete copy[productId];
+      return copy;
+    });
+  };
+
+  const createOrder = async () => {
+    if (Object.keys(cart).length === 0) return;
+    setOrderError('');
+    setOrderSuccess(false);
+    try {
+      const items: OrderItemRequest[] = Object.entries(cart).map(
+        ([id, qty]) => ({ productId: Number(id), quantity: qty })
+      );
+      await OrderService.createOrder({ items });
+      setOrderSuccess(true);
+      setCart({});
+    } catch (err: unknown) {
+      const message = getErrorMessage(err, 'Erro ao criar pedido');
+      setOrderError(message);
+      console.error('OrderService.createOrder error:', err);
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="flex justify-between items-center mb-6">
@@ -57,6 +95,38 @@ export const Products: React.FC = () => {
         </div>
       ) : (
         <>
+          {Object.keys(cart).length > 0 && (
+            <div className="bg-white p-4 rounded mb-6">
+              <h3 className="font-semibold mb-2">Carrinho</h3>
+              {orderError && (
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-2">
+                  {orderError}
+                </div>
+              )}
+              {orderSuccess && (
+                <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-2">
+                  Pedido criado com sucesso!
+                </div>
+              )}
+              <ul>
+                {Object.entries(cart).map(([id, qty]) => {
+                  const prod = products.find(p => p.id === Number(id));
+                  return (
+                    <li key={id} className="flex justify-between">
+                      <span>{prod?.name || `#${id}`}</span>
+                      <span>{qty}x</span>
+                    </li>
+                  );
+                })}
+              </ul>
+              <button
+                onClick={createOrder}
+                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+              >
+                Fazer Pedido
+              </button>
+            </div>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product) => (
               <div key={product.id} className="bg-white rounded-lg shadow-md p-6">
@@ -66,13 +136,29 @@ export const Products: React.FC = () => {
                 <p className="text-gray-600 text-sm mb-4 line-clamp-3">
                   {product.description}
                 </p>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center mb-2">
                   <span className="text-lg font-bold text-blue-600">
                     R$ {product.price.toFixed(2)}
                   </span>
                   <span className="text-xs text-gray-500">
                     ID: {product.id}
                   </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => removeFromCart(product.id)}
+                    disabled={!cart[product.id]}
+                    className="px-2 py-1 bg-gray-200 rounded disabled:opacity-50"
+                  >
+                    -
+                  </button>
+                  <span>{cart[product.id] || 0}</span>
+                  <button
+                    onClick={() => addToCart(product.id)}
+                    className="px-2 py-1 bg-green-200 rounded"
+                  >
+                    +
+                  </button>
                 </div>
               </div>
             ))}

@@ -6,7 +6,7 @@ import { MainLayout } from '../layouts/MainLayout';
 import { Login } from '../pages/Login';
 import { Register } from '../pages/Register';
 import { Products } from '../pages/Products';
-const Orders = () => <div>Orders Page</div>;
+import { Orders } from '../pages/Orders';
 
 const router = createBrowserRouter([
   
