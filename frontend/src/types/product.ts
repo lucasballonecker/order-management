@@ -5,4 +5,5 @@ export interface Product {
   price: number;
   createdAt: string;
   updatedAt: string;
+  active: boolean;
 }

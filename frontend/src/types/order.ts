@@ -1,32 +1,23 @@
-export interface OrderItem {
+export interface OrderItemRequest {
+  productId: number;
+  quantity: number;
+}
+
+export interface OrderItemResponse {
   productName: string;
   quantity: number;
   priceAtMoment: number;
 }
 
-export interface Order {
+export interface CreateOrderRequest {
+  items: OrderItemRequest[];
+}
+
+export interface OrderResponse {
   id: number;
   userEmail: string;
-  status: OrderStatus;
+  status: string;
   total: number;
   createdAt: string;
-  items: OrderItem[];
+  items: OrderItemResponse[];
 }
-
-export interface CreateOrderRequest {
-  items: {
-    productId: number;
-    quantity: number;
-  }[];
-}
-
-export interface UpdateOrderStatusRequest {
-  status: OrderStatus;
-}
-
-export type OrderStatus = 
-  | 'CREATED'
-  | 'PAID'
-  | 'SHIPPED'
-  | 'DELIVERED'
-  | 'CANCELLED';
