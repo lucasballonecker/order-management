@@ -1,7 +1,13 @@
-export interface Page<T> {
+export interface PaginationParams {
+  page?: number;
+  size?: number;
+  sort?: string; 
+}
+
+export interface PaginationResponse<T> {
   content: T[];
-  totalElements: number;
   totalPages: number;
+  totalElements: number;
   size: number;
   number: number;
   first: boolean;
