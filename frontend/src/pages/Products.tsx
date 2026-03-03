@@ -1,14 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ProductService } from '../services/productService';
 import type { PaginationParams, PaginationResponse } from '../types/pagination';
-import type { Product } from '../types/product';
-import { getErrorMessage } from '../utils/errorHandler';
+import type { ProductResponse } from '../types/product';
 
 export const Products: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [pagination, setPagination] = useState<PaginationResponse<Product> | null>(null);
+  const [pagination, setPagination] = useState<PaginationResponse<ProductResponse> | null>(null);
 
   const [params, setParams] = useState<PaginationParams>({
     page: 0,
@@ -25,8 +24,7 @@ export const Products: React.FC = () => {
       setProducts(response.content);
       setPagination(response);
     } catch (err: unknown) {
-      const message = getErrorMessage(err, 'Erro ao carregar produtos');
-      setError(message);
+      setError('Erro ao carregar produtos');
       console.error('ProductService.getProducts error:', err);
     } finally {
       setLoading(false);

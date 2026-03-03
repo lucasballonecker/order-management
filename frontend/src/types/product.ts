@@ -1,9 +1,13 @@
-export interface Product {
-  id: string;
+export interface ProductRequest {
+  name: string;
+  description?: string;
+  price: number;
+}
+
+export interface ProductResponse {
+  id: number;
   name: string;
   description: string;
   price: number;
-  createdAt: string;
-  updatedAt: string;
   active: boolean;
 }
