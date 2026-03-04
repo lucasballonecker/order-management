@@ -1,4 +1,5 @@
 import api from '../api/api';
+import type { PaginationParams, PaginationResponse } from '../types/pagination';
 import type { CreateOrderRequest, OrderResponse } from '../types/order';
 
 export class OrderService {
@@ -19,6 +20,32 @@ export class OrderService {
       return response.data;
     } catch {
       throw new Error('Erro ao criar pedido');
+    }
+  }
+
+  static async getAllOrders(
+    params?: PaginationParams
+  ): Promise<PaginationResponse<OrderResponse>> {
+    try {
+      const response = await api.get('/orders', {
+        params: {
+          page: params?.page || 0,
+          size: params?.size || 10,
+          sort: params?.sort || 'createdAt,desc'
+        }
+      });
+      return response.data;
+    } catch {
+      throw new Error('Erro ao buscar pedidos');
+    }
+  }
+
+  static async updateOrderStatus(orderId: number, status: string): Promise<OrderResponse> {
+    try {
+      const response = await api.patch(`/orders/${orderId}/status`, { status });
+      return response.data;
+    } catch {
+      throw new Error('Erro ao atualizar status do pedido');
     }
   }
 }

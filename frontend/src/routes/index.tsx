@@ -7,6 +7,7 @@ import { Login } from '../pages/Login';
 import { Register } from '../pages/Register';
 import { Products } from '../pages/Products';
 import { Orders } from '../pages/Orders';
+import { AdminOrders } from '../pages/AdminOrders';
 
 const router = createBrowserRouter([
   
@@ -38,6 +39,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Orders />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/admin/orders',
+        element: (
+          <ProtectedRoute>
+            <AdminOrders />
           </ProtectedRoute>
         ),
       },
