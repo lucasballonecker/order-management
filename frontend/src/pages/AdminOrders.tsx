@@ -3,6 +3,8 @@ import { OrderService } from '../services/orderService';
 import type { PaginationParams, PaginationResponse } from '../types/pagination';
 import type { OrderResponse } from '../types/order';
 import { useAuth } from '../hooks/useAuth';
+import { LoadingSpinner } from '../components/ui/LoadingSpinner';
+import { ErrorMessage } from '../components/ui/ErrorMessage';
 
 export const AdminOrders: React.FC = () => {
   const [orders, setOrders] = useState<OrderResponse[]>([]);
@@ -110,11 +112,7 @@ export const AdminOrders: React.FC = () => {
         <h1 className="text-2xl font-bold text-gray-800">Administração de Pedidos</h1>
       </div>
 
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-        </div>
-      )}
+      {error && <ErrorMessage message={error} />}
 
       
       <div className="bg-white rounded-lg shadow-md p-4 mb-6">
@@ -162,9 +160,7 @@ export const AdminOrders: React.FC = () => {
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-        </div>
+        <LoadingSpinner />
       ) : (
         <>
           <div className="bg-white rounded-lg shadow-md overflow-hidden">

@@ -5,6 +5,8 @@ import type { PaginationParams, PaginationResponse } from '../types/pagination';
 import type { ProductResponse } from '../types/product';
 import type { OrderItemRequest } from '../types/order';
 import { getErrorMessage } from '../utils/errorHandler';
+import { LoadingSpinner } from '../components/ui/LoadingSpinner';
+import { ErrorMessage } from '../components/ui/ErrorMessage';
 
 export const Products: React.FC = () => {
   const [products, setProducts] = useState<ProductResponse[]>([]);
@@ -18,7 +20,7 @@ export const Products: React.FC = () => {
     sort: 'name,asc'
   });
 
-  // simple cart: map productId to quantity
+  
   const [cart, setCart] = useState<Record<number, number>>({});
   const [orderError, setOrderError] = useState('');
   const [orderSuccess, setOrderSuccess] = useState(false);
@@ -83,26 +85,16 @@ export const Products: React.FC = () => {
         <h1 className="text-2xl font-bold text-gray-800">Produtos</h1>
       </div>
 
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-        </div>
-      )}
+      {error && <ErrorMessage message={error} />}
 
       {loading ? (
-        <div className="flex justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-        </div>
+        <LoadingSpinner />
       ) : (
         <>
           {Object.keys(cart).length > 0 && (
             <div className="bg-white p-4 rounded mb-6">
               <h3 className="font-semibold mb-2">Carrinho</h3>
-              {orderError && (
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-2">
-                  {orderError}
-                </div>
-              )}
+              {orderError && <ErrorMessage message={orderError} />}
               {orderSuccess && (
                 <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-2">
                   Pedido criado com sucesso!

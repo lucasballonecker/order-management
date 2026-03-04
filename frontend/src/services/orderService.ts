@@ -8,7 +8,8 @@ export class OrderService {
   static async getMyOrders(): Promise<OrderResponse[]> {
     try {
       const response = await api.get(`${this.BASE_URL}/me`);
-      return response.data;
+      
+      return response.data?.content || [];
     } catch {
       throw new Error('Erro ao buscar pedidos');
     }
