@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { OrderService } from '../services/orderService';
 import type { OrderResponse } from '../types/order';
 import { getErrorMessage } from '../utils/errorHandler';
@@ -6,6 +7,7 @@ import { LoadingSpinner } from '../components/ui/LoadingSpinner';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 
 export const Orders: React.FC = () => {
+  const navigate = useNavigate();
   const [orders, setOrders] = useState<OrderResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -31,7 +33,15 @@ export const Orders: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <h1 className="text-2xl font-bold mb-6">Meus pedidos</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold mb-6">Meus pedidos</h1>
+        <button
+          onClick={() => navigate('/products')}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Ver Produtos
+        </button>
+      </div>
 
       {error && <ErrorMessage message={error} />}
 

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ProductService } from '../services/productService';
 import { OrderService } from '../services/orderService';
 import type { PaginationParams, PaginationResponse } from '../types/pagination';
@@ -9,6 +10,7 @@ import { LoadingSpinner } from '../components/ui/LoadingSpinner';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 
 export const Products: React.FC = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState<ProductResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -56,7 +58,12 @@ export const Products: React.FC = () => {
   const removeFromCart = (productId: number) => {
     setCart(prev => {
       const copy = { ...prev };
-      delete copy[productId];
+      const current = copy[productId] || 0;
+      if (current <= 1) {
+        delete copy[productId];
+      } else {
+        copy[productId] = current - 1;
+      }
       return copy;
     });
   };
@@ -83,6 +90,12 @@ export const Products: React.FC = () => {
     <div className="container mx-auto px-4 py-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Produtos</h1>
+        <button
+          onClick={() => navigate('/orders')}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Meus Pedidos
+        </button>
       </div>
 
       {error && <ErrorMessage message={error} />}

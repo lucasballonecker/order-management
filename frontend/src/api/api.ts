@@ -27,6 +27,14 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     
+    const isLoginRequest = error.config &&
+      typeof error.config.url === 'string' &&
+      error.config.url.includes('/auth/login');
+
+    if (!isLoginRequest && error.response && (error.response.status === 401 || error.response.status === 403)) {
+      localStorage.removeItem('authToken');
+      window.location.href = '/login';
+    }
     return Promise.reject(error);
   }
 );

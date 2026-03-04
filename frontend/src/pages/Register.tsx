@@ -36,7 +36,8 @@ export const Register: React.FC = () => {
       await api.post('/users', {
         name,
         email,
-        password
+        password,
+        role: 'USER' 
       });
 
       setSuccess(true);

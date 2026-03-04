@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import api from '../api/api';
+import axios from 'axios';
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -11,10 +12,19 @@ export const Login: React.FC = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
 
-  
   const from = location.state?.from?.pathname || '/products';
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, from, navigate]);
+
+  if (isAuthenticated) {
+    return null; 
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +45,21 @@ export const Login: React.FC = () => {
       
       navigate(from, { replace: true });
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : 'Erro ao fazer login';
+      let errorMessage = 'Falha ao autenticar. Verifique suas credenciais.';
+      if (axios.isAxiosError(err)) {
+        if (err.response?.data && typeof err.response.data === 'object') {
+          const data = err.response.data as { message?: string; error?: string };
+          errorMessage = data.message || data.error || errorMessage;
+        } else if (err.response) {
+          if (err.response.status === 401 || err.response.status === 403) {
+            errorMessage = 'Credenciais inválidas';
+          } else {
+            errorMessage = `Erro ${err.response.status}: ${err.response.statusText}`;
+          }
+        }
+      } else if (err instanceof Error && err.message) {
+        errorMessage = err.message;
+      }
       setError(errorMessage);
     } finally {
       setLoading(false);
