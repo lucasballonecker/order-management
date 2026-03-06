@@ -19,8 +19,7 @@ const initializeUser = (): AuthUser | null => {
     if (email && role) {
       return { email, role };
     }
-    
-    // Token inválido, remover do localStorage
+
     localStorage.removeItem('authToken');
     return null;
   } catch (error) {

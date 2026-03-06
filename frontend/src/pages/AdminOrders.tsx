@@ -107,22 +107,20 @@ export const AdminOrders: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Administração de Pedidos</h1>
-      </div>
+    <div className="container mx-auto px-4 md:px-8 py-10">
+      <h1 className="text-3xl font-bold text-slate-900 mb-10">Administração de Pedidos</h1>
 
       {error && <ErrorMessage message={error} />}
 
-      
-      <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-white shadow-sm border border-slate-100 rounded-xl p-8 mb-10">
+        <h2 className="text-xl font-semibold text-slate-900 mb-6">Filtros</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">Status</label>
             <select
               value={filters.status}
               onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="block w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
             >
               <option value="">Todos os status</option>
               <option value="CREATED">Criado</option>
@@ -133,27 +131,27 @@ export const AdminOrders: React.FC = () => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Email do Usuário</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">Email do Usuário</label>
             <input
               type="text"
               value={filters.userEmail}
               onChange={(e) => setFilters(prev => ({ ...prev, userEmail: e.target.value }))}
-              placeholder="Filtrar por email"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Filter by email"
+              className="block w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
             />
           </div>
-          <div className="flex items-end space-x-2">
+          <div className="flex items-end gap-3">
             <button
               onClick={handleSearch}
-              className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg transition-colors"
             >
               Buscar
             </button>
             <button
               onClick={handleClearFilters}
-              className="w-full px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+              className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium py-2 rounded-lg transition-colors"
             >
-              Limpar Filtros
+              Limpar
             </button>
           </div>
         </div>
@@ -162,89 +160,95 @@ export const AdminOrders: React.FC = () => {
       {loading ? (
         <LoadingSpinner />
       ) : (
-        <>
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuário</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {orders.map((order) => (
-                  <tr key={order.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      #{order.id}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {order.userEmail}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        order.status === 'DELIVERED' ? 'bg-green-100 text-green-800' :
-                        order.status === 'CANCELLED' ? 'bg-red-100 text-red-800' :
-                        order.status === 'CREATED' ? 'bg-yellow-100 text-yellow-800' :
-                        order.status === 'PAID' ? 'bg-blue-100 text-blue-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>
-                        {order.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      R$ {order.total.toFixed(2)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(order.createdAt).toLocaleDateString('pt-BR')}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                      <select
-                        value={order.status}
-                        onChange={(e) => handleStatusUpdate(order.id, e.target.value)}
-                        className="px-3 py-1 border border-gray-300 rounded text-sm"
-                      >
-                        <option value="CREATED">Criado</option>
-                        <option value="PAID">Pago</option>
-                        <option value="SHIPPED">Enviado</option>
-                        <option value="DELIVERED">Entregue</option>
-                        <option value="CANCELLED">Cancelado</option>
-                      </select>
-                    </td>
+        <div className="flex flex-col gap-10">
+          <div className="bg-white shadow-sm border border-slate-100 rounded-xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-slate-50 border-b border-slate-200">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">ID</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">Usuário</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">Total</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">Data</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">Ações</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  {orders.map((order) => (
+                    <tr key={order.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
+                        #{order.id}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
+                        {order.userEmail}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          order.status === 'DELIVERED' ? 'bg-green-100 text-green-700' :
+                          order.status === 'CANCELLED' ? 'bg-red-100 text-red-700' :
+                          order.status === 'CREATED' ? 'bg-slate-100 text-slate-700' :
+                          order.status === 'PAID' ? 'bg-green-100 text-green-700' :
+                          order.status === 'SHIPPED' ? 'bg-blue-100 text-blue-700' :
+                          'bg-slate-100 text-slate-700'
+                        }`}>
+                          {order.status === 'CREATED' ? 'Criado' :
+                           order.status === 'PAID' ? 'Pago' :
+                           order.status === 'SHIPPED' ? 'Enviado' :
+                           order.status === 'DELIVERED' ? 'Entregue' :
+                           order.status === 'CANCELLED' ? 'Cancelado' : order.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
+                        R$ {order.total.toFixed(2)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
+                        {new Date(order.createdAt).toLocaleDateString('pt-BR')}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <select
+                          value={order.status}
+                          onChange={(e) => handleStatusUpdate(order.id, e.target.value)}
+                          className="block w-full px-2 py-1 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm transition-colors"
+                        >
+                          <option value="CREATED">Criado</option>
+                          <option value="PAID">Pago</option>
+                          <option value="SHIPPED">Enviado</option>
+                          <option value="DELIVERED">Entregue</option>
+                          <option value="CANCELLED">Cancelado</option>
+                        </select>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
-          
           {pagination && (
-            <div className="flex justify-center items-center space-x-2 mt-8">
+            <div className="flex justify-center items-center gap-6">
               <button
                 onClick={() => setParams(prev => ({ ...prev, page: Math.max(0, (prev.page || 0) - 1) }))}
                 disabled={(params.page || 0) === 0 || loading}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
               >
                 Anterior
               </button>
-              
-              <span className="px-4 py-2 text-gray-700">
+
+              <span className="text-slate-700 font-medium">
                 Página {(pagination.number || 0) + 1} de {pagination.totalPages}
               </span>
-              
+
               <button
                 onClick={() => setParams(prev => ({ ...prev, page: (prev.page || 0) + 1 }))}
                 disabled={(params.page || 0) >= (pagination.totalPages - 1) || loading}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
               >
                 Próxima
               </button>
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

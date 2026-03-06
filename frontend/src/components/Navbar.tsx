@@ -11,37 +11,43 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-white shadow-lg">
-      <div className="container mx-auto px-4">
+    <nav className="bg-white shadow-md">
+      <div className="container-centralizado">
         <div className="flex justify-between items-center py-4">
           
           <div className="flex items-center space-x-8">
-            <h1 className="text-xl font-bold text-gray-800">
+            <h1 className="text-2xl font-bold text-gray-900">
               Order Management
             </h1>
             <div className="hidden md:flex space-x-6">
-              <a href="/products" className="text-gray-600 hover:text-gray-800">
+              <a href="/products" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
                 Produtos
               </a>
-              <a href="/orders" className="text-gray-600 hover:text-gray-800">
-                Pedidos
+              <a href="/orders" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
+                Meus Pedidos
               </a>
+              {user?.role === 'ADMIN' && (
+                <a href="/admin/orders" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
+                  Admin
+                </a>
+              )}
             </div>
           </div>
 
-          
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-6">
             {user && (
               <>
-                <span className="text-sm text-gray-600">
-                  Olá, {user.email}
-                </span>
-                <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
-                  {user.role}
-                </span>
+                <div className="hidden md:flex items-center space-x-4">
+                  <span className="text-sm text-gray-600">
+                    Olá, {user.email}
+                  </span>
+                  <span className="px-3 py-1 text-xs bg-blue-100 text-blue-800 rounded-full font-medium">
+                    {user.role === 'ADMIN' ? 'Admin' : 'Usuário'}
+                  </span>
+                </div>
                 <button
                   onClick={handleLogout}
-                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                  className="btn-outline bg-red-50 text-red-700 border-red-300 hover:bg-red-100"
                 >
                   Sair
                 </button>

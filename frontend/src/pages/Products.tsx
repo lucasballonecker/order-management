@@ -87,12 +87,12 @@ export const Products: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Produtos</h1>
+    <div className="container mx-auto px-4 md:px-8 py-10">
+      <div className="flex justify-between items-center mb-10">
+        <h1 className="text-3xl font-bold text-slate-900">Produtos</h1>
         <button
           onClick={() => navigate('/orders')}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2 rounded-lg transition-colors"
         >
           Meus Pedidos
         </button>
@@ -103,64 +103,62 @@ export const Products: React.FC = () => {
       {loading ? (
         <LoadingSpinner />
       ) : (
-        <>
+        <div className="flex flex-col gap-10">
           {Object.keys(cart).length > 0 && (
-            <div className="bg-white p-4 rounded mb-6">
-              <h3 className="font-semibold mb-2">Carrinho</h3>
+            <div className="bg-white shadow-sm border border-slate-100 rounded-xl p-8">
+              <h3 className="text-xl font-semibold text-slate-900 mb-6">Carrinho de Compras</h3>
               {orderError && <ErrorMessage message={orderError} />}
               {orderSuccess && (
-                <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-2">
+                <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4 text-sm">
                   Pedido criado com sucesso!
                 </div>
               )}
-              <ul>
+              <div className="divide-y divide-slate-200 mb-6">
                 {Object.entries(cart).map(([id, qty]) => {
                   const prod = products.find(p => p.id === Number(id));
                   return (
-                    <li key={id} className="flex justify-between">
-                      <span>{prod?.name || `#${id}`}</span>
-                      <span>{qty}x</span>
-                    </li>
+                    <div key={id} className="flex justify-between items-center py-3 first:pt-0 last:pb-0">
+                      <span className="font-medium text-slate-900">{prod?.name || `#${id}`}</span>
+                      <span className="text-slate-600">{qty}x</span>
+                    </div>
                   );
                 })}
-              </ul>
+              </div>
               <button
                 onClick={createOrder}
-                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 rounded-lg transition-colors"
               >
-                Fazer Pedido
+                Finalizar Pedido
               </button>
             </div>
           )}
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product) => (
-              <div key={product.id} className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-lg font-semibold text-gray-800 mb-2">
+              <div key={product.id} className="bg-white shadow-sm hover:shadow-md border border-slate-100 rounded-xl p-6 transition-all">
+                <h2 className="text-xl font-bold text-slate-900 mb-3">
                   {product.name}
                 </h2>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                <p className="text-slate-600 text-sm mb-4 line-clamp-3">
                   {product.description}
                 </p>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-lg font-bold text-blue-600">
+                <div className="flex justify-between items-center mb-6">
+                  <span className="text-2xl font-bold text-indigo-600">
                     R$ {product.price.toFixed(2)}
                   </span>
-                  <span className="text-xs text-gray-500">
-                    ID: {product.id}
-                  </span>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center justify-center gap-3">
                   <button
                     onClick={() => removeFromCart(product.id)}
                     disabled={!cart[product.id]}
-                    className="px-2 py-1 bg-gray-200 rounded disabled:opacity-50"
+                    className="px-3 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
                   >
                     -
                   </button>
-                  <span>{cart[product.id] || 0}</span>
+                  <span className="font-medium text-slate-900 min-w-[2rem] text-center">{cart[product.id] || 0}</span>
                   <button
                     onClick={() => addToCart(product.id)}
-                    className="px-2 py-1 bg-green-200 rounded"
+                    className="px-3 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 transition-colors font-medium"
                   >
                     +
                   </button>
@@ -169,31 +167,30 @@ export const Products: React.FC = () => {
             ))}
           </div>
 
-          
           {pagination && (
-            <div className="flex justify-center items-center space-x-2 mt-8">
+            <div className="flex justify-center items-center gap-6 pt-10">
               <button
                 onClick={() => handlePageChange(params.page! - 1)}
                 disabled={params.page === 0 || loading}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
               >
                 Anterior
               </button>
-              
-              <span className="px-4 py-2 text-gray-700">
+
+              <span className="text-slate-700 font-medium">
                 Página {pagination.number + 1} de {pagination.totalPages}
               </span>
-              
+
               <button
                 onClick={() => handlePageChange(params.page! + 1)}
                 disabled={params.page! >= pagination.totalPages - 1 || loading}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
               >
                 Próxima
               </button>
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

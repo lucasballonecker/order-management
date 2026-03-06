@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
 
 export const Register: React.FC = () => {
@@ -10,8 +9,6 @@ export const Register: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -54,69 +51,84 @@ export const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-center mb-6">
-          Criar Conta
-        </h1>
-        
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-10">
+      <div className="max-w-md w-full bg-white shadow-sm border border-slate-100 rounded-xl p-8">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">
+            Criar Conta
+          </h1>
+          <p className="text-slate-600">Junte-se ao Order Management</p>
+        </div>
+
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">
             {error}
           </div>
         )}
 
         {success && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6 text-sm">
             Cadastro realizado com sucesso! Você já pode fazer login.
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Nome</label>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
+              Nome Completo
+            </label>
             <input
+              id="name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="block w-full px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
               placeholder="Seu nome completo"
               required
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Email</label>
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
+              Email
+            </label>
             <input
+              id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="block w-full px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
               placeholder="seu@email.com"
               required
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Senha</label>
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
+              Senha
+            </label>
             <input
+              id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Sua senha"
+              className="block w-full px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
+              placeholder="Sua senha (mín. 6 caracteres)"
               minLength={6}
               required
             />
           </div>
 
-          <div className="mb-6">
-            <label className="block text-gray-700 mb-2">Confirmar Senha</label>
+          <div>
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700 mb-2">
+              Confirmar Senha
+            </label>
             <input
+              id="confirmPassword"
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="block w-full px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
               placeholder="Confirme sua senha"
               minLength={6}
               required
@@ -126,20 +138,19 @@ export const Register: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg transition-colors disabled:opacity-50"
           >
             {loading ? 'Criando conta...' : 'Criar Conta'}
           </button>
         </form>
 
-        <div className="mt-4 text-center">
-          <span className="text-gray-600">Já tem conta? </span>
-          <button
-            onClick={() => navigate('/login')}
-            className="text-blue-500 hover:text-blue-700 font-medium"
-          >
-            Fazer login
-          </button>
+        <div className="mt-6 text-center">
+          <p className="text-sm text-slate-600">
+            Já tem conta?{' '}
+            <a href="/login" className="text-indigo-600 hover:text-indigo-700 font-medium">
+              Fazer login
+            </a>
+          </p>
         </div>
       </div>
     </div>
