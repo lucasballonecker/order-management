@@ -35,16 +35,12 @@ build/
 .vscode/
 
 ### Environment Variables ###
+# Credentials and local config
 .env
-
-
-### Frontend Dependencies ###
-frontend/node_modules/
-
-### Frontend Environment ###
-frontend/.env
-frontend/.env.*
-*.env
+.env.local
+.env.backup
+backend/.env
+frontend/.env.local
 
 ### Frontend Build Outputs ###
 frontend/dist/

@@ -20,7 +20,7 @@ API completa para gerenciamento de pedidos desenvolvida com Spring Boot 3.5.9 e 
 - 🔐 **Autenticação JWT** com role-based access control
 - 📦 **CRUD de Produtos** com paginação e validação
 - 🛒 **Gestão de Pedidos** com múltiplos itens e status
-- 🛡️ **Segurança** com BCrypt e environment variables
+- 🛡️ **Segurança** com BCrypt e variáveis de ambiente
 - 🐳 **Docker** com multi-stage build
 - 📚 **Documentação** OpenAPI/Swagger
 - 🧪 **Testes** unitários e de integração
@@ -44,29 +44,72 @@ API completa para gerenciamento de pedidos desenvolvida com Spring Boot 3.5.9 e 
    ```
 
 2. **Configure ambiente**
+   
+   **Backend** (Docker):
    ```bash
-   cp backend/.env.example .env
-   # Edite o arquivo .env com suas configurações
+   cp backend/.env.example backend/.env
+   # Edite backend/.env com suas credenciais de banco de dados e JWT_SECRET
+   # ⚠️  Nunca faça commit do arquivo .env - contém segredos/credenciais
+   ```
+   
+   **Frontend** (Local development):
+   ```bash
+   cp frontend/.env.example frontend/.env.local
+   # Edite frontend/.env.local apenas se o backend não estiver em http://localhost:8080
+   # O arquivo .env.local NÃO é versionado (veja .gitignore)
    ```
 
 3. **Execute com Docker (Recomendado)**
    ```bash
    docker-compose up --build
    ```
+   - Carrega automaticamente `backend/.env` para PostgreSQL e o serviço backend
+   - API disponível em: http://localhost:8080
 
 4. **Ou execute localmente**
+   
+   **Backend** (usa H2 em memória, nenhuma configuração de banco necessária):
    ```bash
    cd backend && ./mvnw spring-boot:run -Dspring.profiles.active=dev
+   ```
+   O perfil `dev` utiliza H2 como banco de dados em memória, ideal para desenvolvimento sem dependências externas.
+   
+   **Frontend** (novo terminal):
+   ```bash
+   cd frontend && npm install && npm run dev
+   # Abre http://localhost:5173
    ```
 
 5. **Acesse a API**
    - 🌐 **API**: http://localhost:8080
-   - 📚 **Swagger**: http://localhost:8080/swagger-ui.html
-   - 💓 **Health**: http://localhost:8080/actuator/health
+   - 📚 **Documentação Swagger**: http://localhost:8080/swagger-ui.html
+   - 💓 **Health Check**: http://localhost:8080/actuator/health
 
 ---
 
-## 📚 API Documentation
+## 🔐 Variáveis de Ambiente
+
+### Backend (`backend/.env`)
+As variáveis de ambiente do backend são necessárias apenas ao executar com Docker ou em produção (perfis `docker` e `prod`). Para desenvolvimento local com o perfil `dev` (H2), essas variáveis são opcionais.
+
+- **POSTGRES_DB**: Nome do banco de dados PostgreSQL (padrão: orderdb) - *apenas para Docker/Produção*
+- **POSTGRES_USER**: Usuário do banco PostgreSQL (padrão: postgres) - *apenas para Docker/Produção*
+- **POSTGRES_PASSWORD**: Senha do banco PostgreSQL (⚠️ altere em produção) - *apenas para Docker/Produção*
+- **JWT_SECRET**: Chave secreta para tokens JWT (⚠️ gere uma nova para produção) - *necessária em todos os ambientes*
+
+### Frontend (`frontend/.env.local`)
+- **VITE_API_URL**: URL da API Backend (padrão: http://localhost:8080)
+
+**Notas de Segurança:**
+- ✗ Nunca faça commit de arquivos `.env` no controle de versão
+- ✗ Nunca use credenciais padrão em produção
+- ✓ Use segredos fortes e gerados aleatoriamente
+- ✓ Rotacione segredos periodicamente
+- ✓ Use um gerenciador de segredos para produção (AWS Secrets Manager, Vault, etc.)
+
+---
+
+## 📚 Documentação da API
 
 ### 🔐 Autenticação
 
@@ -211,10 +254,10 @@ cd backend && ./mvnw test
 - **docker**: PostgreSQL + flyway habilitado
 - **prod**: PostgreSQL + configurações de produção
 
-### 🔧 Environment Variables
+### 🔧 Variáveis de Ambiente
 
 ```bash
-# .env
+# backend/.env
 POSTGRES_DB=orderdb
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
@@ -225,13 +268,13 @@ JWT_SECRET=your-super-secret-jwt-key
 
 ## 🐳 Docker
 
-### 🏗️ Build & Run
+### 🌘 Build & Execução
 
 ```bash
-# Build e start
+# Build e inicia
 docker-compose up --build
 
-# Background
+# Em background
 docker-compose up -d
 
 # Logs
@@ -255,19 +298,19 @@ docker-compose down
 
 - ✅ **JWT** com expiração de 8 horas
 - ✅ **BCrypt** para hash de senhas
-- ✅ **Role-based access** (USER/ADMIN)
-- ✅ **Environment variables** para secrets
+- ✅ **Role-based access control** (USER/ADMIN)
+- ✅ **Variáveis de ambiente** para segredos
 - ✅ **.env no .gitignore**
 
-### 🔒 Roles & Permissões
+### 🔒 Funções & Permissões
 
 | Recurso | USER | ADMIN |
 |---------|------|-------|
 | Criar pedido | ✅ | ✅ |
 | Listar meus pedidos | ✅ | ❌ |
-| Listar todos pedidos | ❌ | ✅ |
+| Listar todos os pedidos | ❌ | ✅ |
 | Buscar pedido por ID | ✅ | ✅ |
-| Atualizar status pedido | ❌ | ✅ |
+| Atualizar status do pedido | ❌ | ✅ |
 | Listar produtos | ✅ | ✅ |
 | Criar produto | ❌ | ✅ |
 | Desativar produto | ❌ | ✅ |
@@ -283,7 +326,7 @@ docker-compose down
 # Health check geral
 curl http://localhost:8080/actuator/health
 
-# Response
+# Resposta
 {
   "status": "UP"
 }
@@ -301,7 +344,7 @@ logging.level.org.springframework.security=DEBUG
 
 ## 🤝 Contribuindo
 
-1. Fork o projeto
+1. Faça um Fork do projeto
 2. Crie uma branch: `git checkout -b feature/nova-funcionalidade`
 3. Commit: `git commit -m 'Add nova funcionalidade'`
 4. Push: `git push origin feature/nova-funcionalidade`
