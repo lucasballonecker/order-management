@@ -8,6 +8,7 @@ import { Register } from '../pages/Register';
 import { Products } from '../pages/Products';
 import { Orders } from '../pages/Orders';
 import { AdminOrders } from '../pages/AdminOrders';
+import { NotFound } from '../pages/NotFound';
 
 const router = createBrowserRouter([
   
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
         element: <Navigate to="/products" replace />,
       },
     ],
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ]);
 

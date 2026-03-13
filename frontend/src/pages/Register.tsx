@@ -23,6 +23,12 @@ export const Register: React.FC = () => {
       return;
     }
 
+    if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email)) {
+      setError('Por favor, insira um email válido (ex: usuario@dominio.com)');
+      setLoading(false);
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError('As senhas não coincidem');
       setLoading(false);

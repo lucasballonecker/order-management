@@ -1,13 +1,16 @@
 import { AppRoutes } from './routes';
 import { AuthProvider } from './contexts/AuthContextProvider';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 function App() {
   return (
-    <AuthProvider>
-      <div className="App">
-        <AppRoutes />
-      </div>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <div className="App">
+          <AppRoutes />
+        </div>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

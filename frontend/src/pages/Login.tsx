@@ -31,7 +31,7 @@ export const Login: React.FC = () => {
     const errors: { email?: string; password?: string } = {};
     if (!email) {
       errors.email = 'Email é obrigatório';
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email)) {
       errors.email = 'Email inválido';
     }
     if (!password) {

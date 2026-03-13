@@ -8,6 +8,7 @@ import type { OrderItemRequest } from '../types/order';
 import { getErrorMessage } from '../utils/errorHandler';
 import { LoadingSpinner } from '../components/ui/LoadingSpinner';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { SuccessMessage } from '../components/ui/SuccessMessage';
 
 export const Products: React.FC = () => {
   const navigate = useNavigate();
@@ -46,6 +47,13 @@ export const Products: React.FC = () => {
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
+
+  useEffect(() => {
+    if (orderSuccess) {
+      const timer = setTimeout(() => setOrderSuccess(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [orderSuccess]);
 
   const handlePageChange = (newPage: number) => {
     setParams(prev => ({ ...prev, page: newPage }));
@@ -100,6 +108,14 @@ export const Products: React.FC = () => {
 
       {error && <ErrorMessage message={error} />}
 
+      {orderSuccess && (
+        <SuccessMessage 
+          message="Pedido criado com sucesso!" 
+          onDismiss={() => setOrderSuccess(false)}
+          autoDissmissMs={5000}
+        />
+      )}
+
       {loading ? (
         <LoadingSpinner />
       ) : (
@@ -108,11 +124,6 @@ export const Products: React.FC = () => {
             <div className="bg-white shadow-sm border border-slate-100 rounded-xl p-8">
               <h3 className="text-xl font-semibold text-slate-900 mb-6">Carrinho de Compras</h3>
               {orderError && <ErrorMessage message={orderError} />}
-              {orderSuccess && (
-                <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4 text-sm">
-                  Pedido criado com sucesso!
-                </div>
-              )}
               <div className="divide-y divide-slate-200 mb-6">
                 {Object.entries(cart).map(([id, qty]) => {
                   const prod = products.find(p => p.id === Number(id));

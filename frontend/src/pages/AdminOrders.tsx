@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { OrderService } from '../services/orderService';
 import type { PaginationParams, PaginationResponse } from '../types/pagination';
 import type { OrderResponse } from '../types/order';
@@ -26,7 +26,7 @@ export const AdminOrders: React.FC = () => {
 
   const { user } = useAuth();
 
-  const performSearch = async (filtersToUse: typeof filters) => {
+  const performSearch = useCallback(async (filtersToUse: typeof filters) => {
     if (!user || user.role !== 'ADMIN') return;
 
     setLoading(true);
@@ -58,7 +58,7 @@ export const AdminOrders: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     const pageSize = params.size || 10;
@@ -87,15 +87,26 @@ export const AdminOrders: React.FC = () => {
     }
   };
 
-  const handleSearch = () => {
+  const handleSearch = useCallback(() => {
     performSearch(filters);
-  };
+  }, [filters, performSearch]);
 
   const handleClearFilters = () => {
     const newFilters = { status: '', userEmail: '' };
     setFilters(newFilters);
     performSearch(newFilters);
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        handleSearch();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [filters, handleSearch]);
 
   if (!user || user.role !== 'ADMIN') {
     return (
