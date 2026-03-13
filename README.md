@@ -302,7 +302,7 @@ docker-compose down
 - ✅ **Variáveis de ambiente** para segredos
 - ✅ **.env no .gitignore**
 
-### 🔒 Funções & Permissões
+### 🔒 Roles & Permissões
 
 | Recurso | USER | ADMIN |
 |---------|------|-------|
