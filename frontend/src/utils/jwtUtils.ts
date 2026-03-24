@@ -29,3 +29,16 @@ export function getRoleFromToken(token: string): string | null {
   const payload = decodeJwt(token);
   return payload?.role || null;
 }
+
+export function isTokenExpired(token: string): boolean {
+  const payload = decodeJwt(token);
+  if (!payload || !payload.exp) {
+    return true; 
+  }
+  
+  
+  const expirationTime = payload.exp * 1000;
+  const currentTime = Date.now();
+  
+  return currentTime >= expirationTime;
+}

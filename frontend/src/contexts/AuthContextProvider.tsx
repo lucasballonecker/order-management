@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import type { ReactNode } from 'react';
-import { getEmailFromToken, getRoleFromToken } from '../utils/jwtUtils';
+import { getEmailFromToken, getRoleFromToken, isTokenExpired } from '../utils/jwtUtils';
 import { AuthContext, type AuthContextType, type AuthUser } from './AuthContext';
 
 interface AuthProviderProps {
@@ -12,6 +12,11 @@ const initializeUser = (): AuthUser | null => {
     
     const token = localStorage.getItem('authToken');
     if (!token) return null;
+    
+    if (isTokenExpired(token)) {
+      localStorage.removeItem('authToken');
+      return null;
+    }
     
     const email = getEmailFromToken(token);
     const role = getRoleFromToken(token);
@@ -34,6 +39,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = useCallback((token: string) => {
     try {
+      
+      if (isTokenExpired(token)) {
+        throw new Error('Token expirado');
+      }
+      
       const email = getEmailFromToken(token);
       const role = getRoleFromToken(token);
       
