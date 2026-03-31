@@ -1,4 +1,7 @@
 package com.github.lucasballonecker.ordermanagement.dto.login;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
-public record LoginRequest(String email, String password) {
+public record LoginRequest(@Email @NotBlank String email, 
+ @NotBlank String password) {
 }
