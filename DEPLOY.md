@@ -124,7 +124,51 @@ fetch('https://seu-backend.onrender.com/swagger-ui').then(r => console.log(r.sta
 
 ---
 
-## 📝 Troubleshooting
+## � GitHub Secrets (para CI/CD Pipeline)
+
+O pipeline de CI/CD ([`.github/workflows/cd.yml`](.github/workflows/cd.yml )) faz build e push da imagem Docker para o Docker Hub. Para isso funcionar, você precisa configurar secrets no GitHub.
+
+### Pré-requisitos
+- Conta no [Docker Hub](https://hub.docker.com)
+- Tokens ou senha do Docker Hub
+
+### Passos
+
+1. **Gerar Personal Access Token no Docker Hub**
+   - Ir para [Docker Hub Settings → Personal access tokens](https://hub.docker.com/settings/security)
+   - Generate new token
+   - Description: `github-actions-cd`
+   - Access permissions: `Read & Write`
+   - Copiar o token gerado
+
+2. **Adicionar Secrets no GitHub**
+   - Ir para: `https://github.com/SEU-USER/order-management-api/settings/secrets/actions`
+   - New repository secret
+   - Adicionar 2 secrets:
+     ```
+     DOCKERHUB_USERNAME = seu_usuario_docker_hub
+     DOCKERHUB_TOKEN = seu_token_gerado_acima
+     ```
+
+3. **Verificar Pipeline**
+   - Fazer um push para `main`
+   - Ir para Actions no GitHub
+   - Verificar se CI rodou (testes backend + frontend)
+   - Verificar se CD rodou (build + push Docker)
+
+### Troubleshooting
+
+**"denied: requested access to the resource is denied"**
+- DOCKERHUB_TOKEN está inválido ou expirado
+- Solução: Gerar novo token e atualizar secret no GitHub
+
+**"Pushing to Docker Hub failed"**
+- Usuário não tem permissão ou token faltando
+- Solução: Verificar se `DOCKERHUB_USERNAME` e `DOCKERHUB_TOKEN` estão corretos
+
+---
+
+## �📝 Troubleshooting
 
 ### Backend não responde no Render
 - Verificar logs: Dashboard → Service → Logs
