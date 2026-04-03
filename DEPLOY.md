@@ -51,7 +51,6 @@ Este projeto está configurado para deploy em **Render (Backend)** e **Vercel (F
      ```bash
      # Terminal
      curl https://seu-backend.onrender.com/actuator/health
-     # Deve retornar: {"status":"UP"}
      ```
    - **Swagger:** `https://seu-projeto.onrender.com/swagger-ui`
      - Retorna 401 se não tiver token JWT (esperado, não é erro)
@@ -97,10 +96,25 @@ Este projeto está configurado para deploy em **Render (Backend)** e **Vercel (F
 ## 🔗 Conectar Frontend ao Backend
 
 ### Development Local
+
+**Windows (PowerShell):**
+```powershell
+# Terminal 1: Backend (com perfil dev)
+cd backend
+$env:SPRING_PROFILES_ACTIVE="dev"
+./mvnw.cmd spring-boot:run
+
+# Terminal 2: Frontend
+cd frontend
+npm run dev
+# VITE_API_URL=http://localhost:8080 (automático)
+```
+
+**Linux/Mac (Bash):**
 ```bash
 # Terminal 1: Backend (com perfil dev)
 cd backend
-$env:SPRING_PROFILES_ACTIVE="dev" ; mvn spring-boot:run
+./mvnw spring-boot:run -Dspring.profiles.active=dev
 
 # Terminal 2: Frontend
 cd frontend
@@ -188,11 +202,10 @@ O pipeline de CI/CD ([`.github/workflows/cd.yml`](.github/workflows/cd.yml )) fa
   - Dashboard → Web Service → Settings
   - Health Check Path: `/actuator/health`
   - Health Check Interval: 5 minutos
-- **Ou:** Upgrade para Starter ($7/mês)
 
 ### Frontend mostra erro de API (CORS, 401, etc)
 - **401 no Login:** Backend rejeitou credenciais (esperado se wrong password)
-- **404 em /swagger-ui:** Swagger está no backend (onrender.com), não no frontend (vercel.app)
+- **404 em /swagger-ui:** Swagger está no backend (em ambiente de desenvolvimento), não no frontend (vercel.app)
 - **CORS error:** Verificar `SecurityConfig.java` permite Vercel URL
 - Verificar se está usando `import.meta.env.VITE_API_URL` no código
 - Não funciona com `process.env` (isso é para Node, não navegador)
@@ -214,7 +227,6 @@ O pipeline de CI/CD ([`.github/workflows/cd.yml`](.github/workflows/cd.yml )) fa
 ```
 Frontend:   https://seu-projeto.vercel.app
 Backend:    https://seu-backend.onrender.com
-Swagger:    https://seu-backend.onrender.com/swagger-ui
 Database:   postgresql://{Hostname}:{Port}/{Database} (ver dados em "Info" do Postgres no Render)
 ```
 
@@ -227,6 +239,6 @@ Database:   postgresql://{Hostname}:{Port}/{Database} (ver dados em "Info" do Po
 - [ ] VITE_API_URL setada corretamente no Vercel
 - [ ] JWT_SECRET gerado e setado no Render
 - [ ] CORS configurado no backend
-- [ ] Testes rodando (`npm test` no frontend, `mvn test` no backend)
+- [ ] Testes rodando (`npm test` no frontend, `./mvnw test` no backend)
 - [ ] Docker Compose funcionando localmente
 - [ ] README.md atualizado com URLs de produção
