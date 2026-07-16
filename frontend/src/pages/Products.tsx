@@ -112,7 +112,7 @@ export const Products: React.FC = () => {
         <SuccessMessage 
           message="Pedido criado com sucesso!" 
           onDismiss={() => setOrderSuccess(false)}
-          autoDissmissMs={5000}
+          autoDismissMs={5000}
         />
       )}
 

@@ -3,20 +3,20 @@ import React, { useEffect } from 'react';
 interface SuccessMessageProps {
   message: string;
   onDismiss?: () => void;
-  autoDissmissMs?: number;
+  autoDismissMs?: number;
 }
 
 export const SuccessMessage: React.FC<SuccessMessageProps> = ({ 
   message, 
   onDismiss,
-  autoDissmissMs = 5000 
+  autoDismissMs = 5000 
 }) => {
   useEffect(() => {
-    if (autoDissmissMs && onDismiss) {
-      const timer = setTimeout(onDismiss, autoDissmissMs);
+    if (autoDismissMs && onDismiss) {
+      const timer = setTimeout(onDismiss, autoDismissMs);
       return () => clearTimeout(timer);
     }
-  }, [autoDissmissMs, onDismiss]);
+  }, [autoDismissMs, onDismiss]);
 
   return (
     <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4 text-sm flex items-center justify-between">
