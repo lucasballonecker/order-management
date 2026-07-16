@@ -1,5 +1,4 @@
-import React, { useCallback, useState } from 'react';
-import type { ReactNode } from 'react';
+import { useCallback, useState, type ReactNode } from 'react';
 import { getEmailFromToken, getRoleFromToken, isTokenExpired } from '../utils/jwtUtils';
 import { AuthContext, type AuthContextType, type AuthUser } from './AuthContext';
 
@@ -34,7 +33,7 @@ const initializeUser = (): AuthUser | null => {
   }
 };
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<AuthUser | null>(initializeUser);
 
   const login = useCallback((token: string) => {

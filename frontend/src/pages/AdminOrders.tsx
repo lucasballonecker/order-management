@@ -6,7 +6,7 @@ import { useAuth } from '../hooks/useAuth';
 import { LoadingSpinner } from '../components/ui/LoadingSpinner';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 
-export const AdminOrders: React.FC = () => {
+export const AdminOrders = () => {
   const [orders, setOrders] = useState<OrderResponse[]>([]);
   const [allOrders, setAllOrders] = useState<OrderResponse[]>([]);
   const [loading, setLoading] = useState(false);

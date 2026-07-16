@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import api from '../api/api';
 
-export const Register: React.FC = () => {
+export const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

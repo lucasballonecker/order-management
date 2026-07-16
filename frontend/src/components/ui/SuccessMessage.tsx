@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 interface SuccessMessageProps {
   message: string;
@@ -6,11 +6,11 @@ interface SuccessMessageProps {
   autoDismissMs?: number;
 }
 
-export const SuccessMessage: React.FC<SuccessMessageProps> = ({ 
+export const SuccessMessage = ({ 
   message, 
   onDismiss,
   autoDismissMs = 5000 
-}) => {
+}: SuccessMessageProps) => {
   useEffect(() => {
     if (autoDismissMs && onDismiss) {
       const timer = setTimeout(onDismiss, autoDismissMs);

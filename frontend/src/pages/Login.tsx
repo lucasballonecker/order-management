@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 import api from '../api/api';
 import axios from 'axios';
 
-export const Login: React.FC = () => {
+export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);

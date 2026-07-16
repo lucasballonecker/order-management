@@ -10,7 +10,7 @@ import { LoadingSpinner } from '../components/ui/LoadingSpinner';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { SuccessMessage } from '../components/ui/SuccessMessage';
 
-export const Products: React.FC = () => {
+export const Products = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState<ProductResponse[]>([]);
   const [loading, setLoading] = useState(false);

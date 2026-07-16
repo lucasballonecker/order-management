@@ -6,7 +6,7 @@ import { getErrorMessage } from '../utils/errorHandler';
 import { LoadingSpinner } from '../components/ui/LoadingSpinner';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 
-export const Orders: React.FC = () => {
+export const Orders = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState<OrderResponse[]>([]);
   const [loading, setLoading] = useState(false);
