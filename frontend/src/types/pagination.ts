@@ -1,7 +1,7 @@
 export interface PaginationParams {
-  page?: number;
-  size?: number;
-  sort?: string; 
+  page: number;
+  size: number;
+  sort: string; 
 }
 
 export interface PaginationResponse<T> {

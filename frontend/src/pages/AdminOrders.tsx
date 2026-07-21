@@ -9,6 +9,7 @@ import type { AdminOrderFilters } from '../components/AdminOrders/FiltersPanel';
 import { FiltersPanel } from '../components/AdminOrders/FiltersPanel';
 import { OrdersTable } from '../components/AdminOrders/OrdersTable';
 import { PaginationBar } from '../components/AdminOrders/PaginationBar';
+import { ViewControls } from '../components/AdminOrders/ViewControls';
 
 const applyFilters = (orders: OrderResponse[], filters: AdminOrderFilters) => {
   let filtered = orders;
@@ -18,9 +19,9 @@ const applyFilters = (orders: OrderResponse[], filters: AdminOrderFilters) => {
   }
 
   if (filters.userEmail) {
-    const temp = filters.userEmail.toLowerCase();
+    const normalizedEmail = filters.userEmail.toLowerCase();
     filtered = filtered.filter((order) =>
-      order.userEmail.toLowerCase().includes(temp)
+      order.userEmail.toLowerCase().includes(normalizedEmail)
     );
   }
 
@@ -28,26 +29,23 @@ const applyFilters = (orders: OrderResponse[], filters: AdminOrderFilters) => {
 };
 
 const paginate = (orders: OrderResponse[], page: number, size: number) => {
-  const safeSize = size;
-  const safePage = page;
+  const startIndex = page * size;
+  const endIndex = startIndex + size;
+  const content = orders.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(orders.length / size);
 
-  const startIndex = safePage * safeSize;
-  const endIndex = startIndex + safeSize;
-
-  const paginatedOrders = orders.slice(startIndex, endIndex);
-
-  const totalPages = Math.ceil(orders.length / safeSize);
-
-  return {
-    paginatedOrders,
-    pagination: {
-      content: paginatedOrders,
-      totalElements: orders.length,
-      totalPages,
-      number: safePage,
-      size: safeSize,
-    } as PaginationResponse<OrderResponse>,
+  const pagination: PaginationResponse<OrderResponse> = {
+    content,
+    totalElements: orders.length,
+    totalPages,
+    number: page,
+    size,
+    first: page === 0,
+    last: page >= totalPages - 1 || totalPages === 0,
+    empty: content.length === 0,
   };
+
+  return { pagination };
 };
 
 export const AdminOrders = () => {
@@ -69,7 +67,7 @@ export const AdminOrders = () => {
   const { user } = useAuth();
 
   const performSearch = useCallback(
-    async (filtersToUse: AdminOrderFilters) => {
+    async (filtersToUse: AdminOrderFilters, sortToUse: string) => {
       if (!user || user.role !== 'ADMIN') return;
 
       setLoading(true);
@@ -79,7 +77,7 @@ export const AdminOrders = () => {
         const response = await OrderService.getAllOrders({
           page: 0,
           size: 1000,
-          sort: 'createdAt,desc',
+          sort: sortToUse,
         });
 
         const filtered = applyFilters(response.content, filtersToUse);
@@ -95,27 +93,34 @@ export const AdminOrders = () => {
     [user]
   );
 
-  const paginated = paginate(allOrders, params.page ?? 0, params.size ?? 10);
+  const { pagination } = paginate(allOrders, params.page, params.size);
 
+  const handleSortChange = (newSort: string) => {
+    setParams((prev) => ({ ...prev, sort: newSort, page: 0 }));
+    performSearch(filters, newSort);
+  };
 
+  const handleSizeChange = (newSize: number) => {
+    setParams((prev) => ({ ...prev, size: newSize, page: 0 }));
+  };
 
   const handleStatusUpdate = async (orderId: number, newStatus: string) => {
     try {
       await OrderService.updateOrderStatus(orderId, newStatus);
-      performSearch(filters);
+      performSearch(filters, params.sort);
     } catch {
       setError('Erro ao atualizar status');
     }
   };
 
   const handleSearch = () => {
-    performSearch(filters);
+    performSearch(filters, params.sort);
   };
 
   const handleClearFilters = () => {
     const newFilters = { status: '', userEmail: '' };
     setFilters(newFilters);
-    performSearch(newFilters);
+    performSearch(newFilters, params.sort);
   };
 
   if (!user || user.role !== 'ADMIN') {
@@ -131,7 +136,7 @@ export const AdminOrders = () => {
     );
   }
 
-  return (
+  return ( 
     <div className="container mx-auto px-4 md:px-8 py-10">
       <h1 className="text-3xl font-bold text-slate-900 mb-10">
         Administração de Pedidos
@@ -146,18 +151,25 @@ export const AdminOrders = () => {
         onClear={handleClearFilters}
       />
 
+      <ViewControls
+        sort={params.sort}
+        size={params.size}
+        onSortChange={handleSortChange}
+        onSizeChange={handleSizeChange}
+      />
+
       {loading ? (
         <LoadingSpinner />
       ) : (
         <div className="flex flex-col gap-10">
           <OrdersTable
-            orders={paginated.paginatedOrders}
+            orders={pagination.content}
             onStatusUpdate={handleStatusUpdate}
           />
 
           <PaginationBar
-            pagination={paginated.pagination}
-            currentPage={params.page ?? 0}
+            pagination={pagination}
+            currentPage={params.page}
             loading={loading}
             setPage={(nextPage: number) => setParams((prev) => ({ ...prev, page: nextPage }))}
           />
@@ -166,3 +178,4 @@ export const AdminOrders = () => {
     </div>
   );
 };
+
