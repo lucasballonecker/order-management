@@ -3,7 +3,7 @@ export interface ValidationErrors {
   password?: string;
 }
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
 
 export const validateLoginForm = (email: string, password: string): ValidationErrors => {
   const errors: ValidationErrors = {};
@@ -22,4 +22,5 @@ export const validateLoginForm = (email: string, password: string): ValidationEr
 
   return errors;
 };
+
 

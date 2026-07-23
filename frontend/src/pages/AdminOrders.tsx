@@ -5,6 +5,7 @@ import type { OrderResponse } from '../types/order';
 import { useAuth } from '../hooks/useAuth';
 import { LoadingSpinner } from '../components/ui/LoadingSpinner';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { getErrorMessage } from '../utils/errorHandler';
 import type { AdminOrderFilters } from '../components/AdminOrders/FiltersPanel';
 import { FiltersPanel } from '../components/AdminOrders/FiltersPanel';
 import { OrdersTable } from '../components/AdminOrders/OrdersTable';
@@ -84,8 +85,8 @@ export const AdminOrders = () => {
 
         setAllOrders(filtered);
         setParams((prev) => ({ ...prev, page: 0 }));
-      } catch {
-        setError('Erro ao carregar pedidos');
+      } catch (err: unknown) {
+        setError(getErrorMessage(err, 'Erro ao carregar pedidos'));
       } finally {
         setLoading(false);
       }
@@ -108,8 +109,8 @@ export const AdminOrders = () => {
     try {
       await OrderService.updateOrderStatus(orderId, newStatus);
       performSearch(filters, params.sort);
-    } catch {
-      setError('Erro ao atualizar status');
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, 'Erro ao atualizar status'));
     }
   };
 

@@ -1,5 +1,22 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../api/api';
+import { EMAIL_REGEX } from '../utils/validation';
+import { getErrorMessage } from '../utils/errorHandler';
+
+const INPUT_CLASS = "block w-full px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors";
+
+const clearForm = (
+  setName: (v: string) => void,
+  setEmail: (v: string) => void,
+  setPassword: (v: string) => void,
+  setConfirmPassword: (v: string) => void
+) => {
+  setName('');
+  setEmail('');
+  setPassword('');
+  setConfirmPassword('');
+};
 
 export const Register = () => {
   const [name, setName] = useState('');
@@ -10,47 +27,42 @@ export const Register = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = async (e: React.SyntheticEvent) => {
+  const setValidationError = (message: string) => {
+    setError(message);
+    return;
+  };
+
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
     setSuccess(false);
 
-    
     if (!name || !email || !password || !confirmPassword) {
-      setError('Por favor, preencha todos os campos');
-      setLoading(false);
-      return;
+      return setValidationError('Por favor, preencha todos os campos');
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email)) {
-      setError('Por favor, insira um email válido (ex: usuario@dominio.com)');
-      setLoading(false);
-      return;
+    if (!EMAIL_REGEX.test(email)) {
+      return setValidationError('Por favor, insira um email válido (ex: usuario@dominio.com)');
     }
 
     if (password !== confirmPassword) {
-      setError('As senhas não coincidem');
-      setLoading(false);
-      return;
+      return setValidationError('As senhas não coincidem');
     }
+
+    setLoading(true);
 
     try {
       await api.post('/users', {
         name,
         email,
         password,
-        role: 'USER' 
+        role: 'USER'
       });
 
       setSuccess(true);
-      setName('');
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
+      clearForm(setName, setEmail, setPassword, setConfirmPassword);
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : 'Erro ao registrar usuário';
-      setError(errorMessage);
+      setError(getErrorMessage(err, 'Erro ao registrar usuário'));
     } finally {
       setLoading(false);
     }
@@ -88,7 +100,7 @@ export const Register = () => {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="block w-full px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
+              className={INPUT_CLASS}
               placeholder="Seu nome completo"
               required
             />
@@ -103,7 +115,7 @@ export const Register = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="block w-full px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
+              className={INPUT_CLASS}
               placeholder="seu@email.com"
               required
             />
@@ -118,7 +130,7 @@ export const Register = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="block w-full px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
+              className={INPUT_CLASS}
               placeholder="Sua senha (mín. 6 caracteres)"
               minLength={6}
               required
@@ -134,7 +146,7 @@ export const Register = () => {
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="block w-full px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
+              className={INPUT_CLASS}
               placeholder="Confirme sua senha"
               minLength={6}
               required
@@ -152,13 +164,14 @@ export const Register = () => {
 
         <div className="mt-6 text-center">
           <p className="text-sm text-slate-600">
-            Já tem conta?{' '}
-            <a href="/login" className="text-indigo-600 hover:text-indigo-700 font-medium">
+            Já tem conta?
+            <Link to="/login" className="text-indigo-600 hover:text-indigo-700 font-medium">
               Fazer login
-            </a>
+            </Link>
           </p>
         </div>
       </div>
     </div>
   );
 };
+
