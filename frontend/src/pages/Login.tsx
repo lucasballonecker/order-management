@@ -1,51 +1,33 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, useLocation, Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import api from '../api/api';
-import axios from 'axios';
+import { getErrorMessage } from '../utils/errorHandler';
+import { validateLoginForm, type ValidationErrors } from '../utils/validation';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [validationErrors, setValidationErrors] = useState<{ email?: string; password?: string }>({});
+  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
 
   const navigate = useNavigate();
   const location = useLocation();
   const { login, isAuthenticated } = useAuth();
 
-  const from = location.state?.from?.pathname || '/products';
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate(from, { replace: true });
-    }
-  }, [isAuthenticated, from, navigate]);
+  const from = location.state?.from?.pathname ?? '/products';
 
   if (isAuthenticated) {
-    return null;
+    return <Navigate to={from} replace />;
   }
 
-  const validateForm = () => {
-    const errors: { email?: string; password?: string } = {};
-    if (!email) {
-      errors.email = 'Email é obrigatório';
-    } else if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email)) {
-      errors.email = 'Email inválido';
-    }
-    if (!password) {
-      errors.password = 'Senha é obrigatória';
-    } else if (password.length < 6) {
-      errors.password = 'Senha deve ter pelo menos 6 caracteres';
-    }
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!validateForm()) return;
+
+    const errors = validateLoginForm(email, password);
+    setValidationErrors(errors);
+    if (Object.keys(errors).length > 0) return;
 
     setLoading(true);
     setError('');
@@ -58,28 +40,11 @@ export const Login = () => {
 
       const { token } = response.data;
 
-
       login(token);
-
 
       navigate(from, { replace: true });
     } catch (err: unknown) {
-      let errorMessage = 'Falha ao autenticar. Verifique suas credenciais.';
-      if (axios.isAxiosError(err)) {
-        if (err.response?.data && typeof err.response.data === 'object') {
-          const data = err.response.data as { message?: string; error?: string };
-          errorMessage = data.message || data.error || errorMessage;
-        } else if (err.response) {
-          if (err.response.status === 401 || err.response.status === 403) {
-            errorMessage = 'Credenciais inválidas';
-          } else {
-            errorMessage = `Erro ${err.response.status}: ${err.response.statusText}`;
-          }
-        }
-      } else if (err instanceof Error && err.message) {
-        errorMessage = err.message;
-      }
-      setError(errorMessage);
+      setError(getErrorMessage(err, 'Falha ao autenticar. Verifique suas credenciais.'));
     } finally {
       setLoading(false);
     }
@@ -154,9 +119,9 @@ export const Login = () => {
         <div className="mt-6 text-center">
           <p className="text-slate-600 text-sm">
             Não tem conta?{' '}
-            <a href="/register" className="text-indigo-600 hover:text-indigo-700 font-medium">
+            <Link to="/register" className="text-indigo-600 hover:text-indigo-700 font-medium">
               Cadastre-se
-            </a>
+            </Link>
           </p>
         </div>
       </div>
