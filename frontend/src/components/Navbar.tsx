@@ -1,5 +1,5 @@
 import { useAuth } from '../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const Navbar = () => {
   const { user, logout } = useAuth();
@@ -20,9 +20,9 @@ export const Navbar = () => {
             </h1>
             <div className="flex flex-wrap items-center gap-4">
               {user?.role === 'ADMIN' && (
-                <a href="/admin/orders" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
+                <Link to="/admin/orders" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
                   Painel de Administração
-                </a>
+                </Link>
               )}
             </div>
           </div>
