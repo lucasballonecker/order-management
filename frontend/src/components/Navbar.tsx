@@ -12,7 +12,7 @@ export const Navbar = () => {
 
   return (
     <nav className="bg-white shadow-md">
-      <div className="container-centralizado">
+      <div className="container mx-auto px-4 md:px-8">
         <div className="flex flex-wrap items-center justify-between gap-4 py-4">
           <div className="flex flex-wrap items-center gap-4">
             <h1 className="text-2xl font-bold text-gray-900">
@@ -38,7 +38,7 @@ export const Navbar = () => {
 
               <button
                 onClick={handleLogout}
-                className="btn-outline bg-red-50 text-red-700 border-red-300 hover:bg-red-100"
+                className="bg-red-50 text-red-700 border-red-300 hover:bg-red-100"
               >
                   Sair
               </button>

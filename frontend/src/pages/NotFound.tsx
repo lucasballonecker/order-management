@@ -7,8 +7,8 @@ export const NotFound = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 px-4 py-10">
       <div className="max-w-md w-full text-center">
         <div className="mb-8">
-          <div className="inline-flex items-center justify-center h-24 w-24 rounded-full bg-indigo-100 mb-4">
-            <span className="text-5xl font-bold text-indigo-600">404</span>
+          <div className="inline-flex items-center justify-center h-24 w-24 rounded-full bg-primary-100 mb-4">
+            <span className="text-5xl font-bold text-primary-600">404</span>
           </div>
         </div>
 
@@ -23,7 +23,7 @@ export const NotFound = () => {
         <div className="flex flex-col gap-3">
           <button
             onClick={() => navigate('/products')}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg transition-colors"
+            className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 rounded-lg transition-colors"
           >
             Voltar para Produtos
           </button>

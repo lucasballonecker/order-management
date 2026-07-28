@@ -76,14 +76,14 @@ export const Login = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className={`block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors ${
-                validationErrors.email ? 'border-red-300' : 'border-slate-300'
+              className={`block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition-colors ${
+                validationErrors.email ? 'border-error-300' : 'border-slate-300'
               }`}
               placeholder="seu@email.com"
               required
             />
             {validationErrors.email && (
-              <p className="mt-1 text-sm text-red-600">{validationErrors.email}</p>
+              <p className="mt-1 text-sm text-error-600">{validationErrors.email}</p>
             )}
           </div>
 
@@ -96,21 +96,21 @@ export const Login = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors ${
-                validationErrors.password ? 'border-red-300' : 'border-slate-300'
+              className={`block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition-colors ${
+                validationErrors.password ? 'border-error-300' : 'border-slate-300'
               }`}
               placeholder="Sua senha"
               required
             />
             {validationErrors.password && (
-              <p className="mt-1 text-sm text-red-600">{validationErrors.password}</p>
+              <p className="mt-1 text-sm text-error-600">{validationErrors.password}</p>
             )}
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg transition-colors disabled:opacity-50"
+            className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 rounded-lg transition-colors disabled:opacity-50"
           >
             {loading ? 'Entrando...' : 'Entrar'}
           </button>
@@ -119,7 +119,7 @@ export const Login = () => {
         <div className="mt-6 text-center">
           <p className="text-slate-600 text-sm">
             Não tem conta?{' '}
-            <Link to="/register" className="text-indigo-600 hover:text-indigo-700 font-medium">
+            <Link to="/register" className="text-primary-600 hover:text-primary-700 font-medium">
               Cadastre-se
             </Link>
           </p>

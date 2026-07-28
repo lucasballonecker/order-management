@@ -4,7 +4,7 @@ import api from '../api/api';
 import { EMAIL_REGEX } from '../utils/validation';
 import { getErrorMessage } from '../utils/errorHandler';
 
-const INPUT_CLASS = "block w-full px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors";
+const INPUT_CLASS = "block w-full px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition-colors";
 
 const clearForm = (
   setName: (v: string) => void,
@@ -156,7 +156,7 @@ export const Register = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg transition-colors disabled:opacity-50"
+            className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 rounded-lg transition-colors disabled:opacity-50"
           >
             {loading ? 'Criando conta...' : 'Criar Conta'}
           </button>
@@ -165,7 +165,7 @@ export const Register = () => {
         <div className="mt-6 text-center">
           <p className="text-sm text-slate-600">
             Já tem conta?
-            <Link to="/login" className="text-indigo-600 hover:text-indigo-700 font-medium">
+            <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
               Fazer login
             </Link>
           </p>
