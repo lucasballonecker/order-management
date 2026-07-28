@@ -4,7 +4,8 @@ import { OrderService } from '../services/orderService';
 import type { OrderResponse } from '../types/order';
 import { getErrorMessage } from '../utils/errorHandler';
 import { LoadingSpinner } from '../components/ui/LoadingSpinner';
-import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { Alert } from '../components/ui/Alert';
+import { Button } from '../components/ui/Button';
 import { OrderCard } from '../components/Orders/OrderCard';
 import { EmptyOrders } from '../components/Orders/EmptyOrders';
 
@@ -37,15 +38,12 @@ export const Orders = () => {
     <div className="container mx-auto px-4 md:px-8 py-10">
       <div className="flex justify-between items-center mb-10">
         <h1 className="text-3xl font-bold text-slate-900">Meus Pedidos</h1>
-        <button
-          onClick={() => navigate('/products')}
-          className="bg-primary-600 hover:bg-primary-700 text-white font-medium px-6 py-2 rounded-lg transition-colors"
-        >
+        <Button onClick={() => navigate('/products')}>
           Ver Produtos
-        </button>
+        </Button>
       </div>
 
-      {error && <ErrorMessage message={error} />}
+      {error && <Alert type="error" message={error} />}
 
       {loading ? (
         <LoadingSpinner />

@@ -7,8 +7,8 @@ import type { ProductResponse } from '../types/product';
 import type { OrderItemRequest } from '../types/order';
 import { getErrorMessage } from '../utils/errorHandler';
 import { LoadingSpinner } from '../components/ui/LoadingSpinner';
-import { ErrorMessage } from '../components/ui/ErrorMessage';
-import { SuccessMessage } from '../components/ui/SuccessMessage';
+import { Alert } from '../components/ui/Alert';
+import { Button } from '../components/ui/Button';
 import { ProductCard } from '../components/Products/ProductCard';
 import { ShoppingCart } from '../components/Products/ShoppingCart';
 import { PaginationControls } from '../components/Products/PaginationControls';
@@ -100,22 +100,15 @@ export const Products = () => {
     <div className="container mx-auto px-4 md:px-8 py-10">
       <div className="flex justify-between items-center mb-10">
         <h1 className="text-3xl font-bold text-slate-900">Produtos</h1>
-        <button
-          onClick={() => navigate('/orders')}
-          className="bg-primary-600 hover:bg-primary-700 text-white font-medium px-6 py-2 rounded-lg transition-colors"
-        >
+        <Button onClick={() => navigate('/orders')}>
           Meus Pedidos
-        </button>
+        </Button>
       </div>
 
-      {error && <ErrorMessage message={error} />}
+      {error && <Alert type="error" message={error} />}
 
       {orderSuccess && (
-        <SuccessMessage 
-          message="Pedido criado com sucesso!" 
-          onDismiss={() => setOrderSuccess(false)}
-          autoDismissMs={5000}
-        />
+        <Alert type="success" message="Pedido criado com sucesso!" />
       )}
 
       {loading ? (

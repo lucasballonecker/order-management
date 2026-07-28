@@ -4,6 +4,8 @@ import { useAuth } from '../hooks/useAuth';
 import api from '../api/api';
 import { getErrorMessage } from '../utils/errorHandler';
 import { validateLoginForm, type ValidationErrors } from '../utils/validation';
+import { Button } from '../components/ui/Button';
+import { Alert } from '../components/ui/Alert';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -60,11 +62,7 @@ export const Login = () => {
           <p className="text-slate-600">Entre na sua conta</p>
         </div>
 
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">
-            {error}
-          </div>
-        )}
+        {error && <Alert type="error" message={error} />}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <div>
@@ -107,19 +105,15 @@ export const Login = () => {
             )}
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 rounded-lg transition-colors disabled:opacity-50"
-          >
+          <Button type="submit" loading={loading} className="w-full">
             {loading ? 'Entrando...' : 'Entrar'}
-          </button>
+          </Button>
         </form>
 
         <div className="mt-6 text-center">
           <p className="text-slate-600 text-sm">
-            Não tem conta?{' '}
-            <Link to="/register" className="text-primary-600 hover:text-primary-700 font-medium">
+            Não tem conta?
+            <Link to="/register" className="text-primary-600 hover:text-primary-700 font-medium pl-1">
               Cadastre-se
             </Link>
           </p>

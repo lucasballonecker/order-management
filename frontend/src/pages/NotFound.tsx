@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { Button } from '../components/ui/Button';
 
 export const NotFound = () => {
   const navigate = useNavigate();
@@ -21,18 +22,12 @@ export const NotFound = () => {
         </p>
 
         <div className="flex flex-col gap-3">
-          <button
-            onClick={() => navigate('/products')}
-            className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 rounded-lg transition-colors"
-          >
+          <Button onClick={() => navigate('/products')} className="w-full">
             Voltar para Produtos
-          </button>
-          <button
-            onClick={() => navigate(-1)}
-            className="w-full bg-slate-200 hover:bg-slate-300 text-slate-900 font-medium py-3 rounded-lg transition-colors"
-          >
+          </Button>
+          <Button variant="outline" onClick={() => navigate(-1)} className="w-full">
             Voltar Página Anterior
-          </button>
+          </Button>
         </div>
       </div>
     </div>

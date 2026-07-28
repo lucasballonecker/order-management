@@ -85,7 +85,7 @@ export const OrdersTable = ({ orders, onStatusUpdate }: OrdersTableProps) => {
                   <select
                     value={order.status}
                     onChange={(e) => onStatusUpdate(order.id, e.target.value)}
-                    className="block w-full px-2 py-1 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm transition-colors"
+                    className="block w-full px-2 py-1 border border-slate-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 text-sm transition-colors"
                   >
                     <option value="CREATED">Criado</option>
                     <option value="PAID">Pago</option>

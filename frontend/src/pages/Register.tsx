@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import api from '../api/api';
 import { EMAIL_REGEX } from '../utils/validation';
 import { getErrorMessage } from '../utils/errorHandler';
+import { Button } from '../components/ui/Button';
+import { Alert } from '../components/ui/Alert';
 
 const INPUT_CLASS = "block w-full px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition-colors";
 
@@ -78,17 +80,9 @@ export const Register = () => {
           <p className="text-slate-600">Junte-se ao Order Management</p>
         </div>
 
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">
-            {error}
-          </div>
-        )}
+        {error && <Alert type="error" message={error} />}
 
-        {success && (
-          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6 text-sm">
-            Cadastro realizado com sucesso! Você já pode fazer login.
-          </div>
-        )}
+        {success && <Alert type="success" message="Cadastro realizado com sucesso! Você já pode fazer login." />}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <div>
@@ -153,19 +147,15 @@ export const Register = () => {
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 rounded-lg transition-colors disabled:opacity-50"
-          >
+          <Button type="submit" loading={loading} className="w-full">
             {loading ? 'Criando conta...' : 'Criar Conta'}
-          </button>
+          </Button>
         </form>
 
         <div className="mt-6 text-center">
           <p className="text-sm text-slate-600">
             Já tem conta?
-            <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
+            <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium pl-1">
               Fazer login
             </Link>
           </p>

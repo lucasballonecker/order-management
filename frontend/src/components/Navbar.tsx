@@ -1,5 +1,6 @@
 import { useAuth } from '../hooks/useAuth';
 import { Link, useNavigate } from 'react-router-dom';
+import { Button } from './ui/Button';
 
 export const Navbar = () => {
   const { user, logout } = useAuth();
@@ -36,12 +37,9 @@ export const Navbar = () => {
                   </span>
               )}
 
-              <button
-                onClick={handleLogout}
-                className="bg-red-50 text-red-700 border-red-300 hover:bg-red-100"
-              >
+              <Button variant="danger" onClick={handleLogout}>
                   Sair
-              </button>
+              </Button>
                 </>
               )}
           </div>

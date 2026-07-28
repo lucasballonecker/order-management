@@ -1,5 +1,6 @@
 import type { ProductResponse } from '../../types/product';
-import { ErrorMessage } from '../ui/ErrorMessage';
+import { Alert } from '../ui/Alert';
+import { Button } from '../ui/Button';
 
 interface ShoppingCartProps {
   cart: Record<number, number>;
@@ -14,7 +15,7 @@ export const ShoppingCart = ({ cart, products, orderError, onCreateOrder }: Shop
   return (
     <div className="bg-white shadow-sm border border-slate-100 rounded-xl p-8">
       <h3 className="text-xl font-semibold text-slate-900 mb-6">Carrinho de Compras</h3>
-      {orderError && <ErrorMessage message={orderError} />}
+      {orderError && <Alert type="error" message={orderError} />}
       <div className="divide-y divide-slate-200 mb-6">
         {Object.entries(cart).map(([id, qty]) => {
           const product = products.find(p => p.id === Number(id));
@@ -26,12 +27,9 @@ export const ShoppingCart = ({ cart, products, orderError, onCreateOrder }: Shop
           );
         })}
       </div>
-      <button
-        onClick={onCreateOrder}
-        className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 rounded-lg transition-colors"
-      >
+      <Button onClick={onCreateOrder} className="w-full">
         Finalizar Pedido
-      </button>
+      </Button>
     </div>
   );
 };

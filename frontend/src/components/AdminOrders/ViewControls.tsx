@@ -20,7 +20,7 @@ export const ViewControls = ({
         <select
           value={sort}
           onChange={(e) => onSortChange(e.target.value)}
-          className="px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+          className="px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 text-sm"
         >
           <option value="createdAt,desc">Data (mais recente)</option>
           <option value="createdAt,asc">Data (mais antigo)</option>
@@ -38,7 +38,7 @@ export const ViewControls = ({
         <select
           value={size}
           onChange={(e) => onSizeChange(Number(e.target.value))}
-          className="px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+          className="px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 text-sm"
         >
           <option value={5}>5</option>
           <option value={10}>10</option>

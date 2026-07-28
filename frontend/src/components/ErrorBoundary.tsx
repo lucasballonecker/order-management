@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { Button } from './ui/Button';
 
 interface Props {
   children: ReactNode;
@@ -54,18 +55,12 @@ export class ErrorBoundary extends Component<Props, State> {
             )}
 
             <div className="flex flex-col gap-3">
-              <button
-                onClick={this.handleReset}
-                className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 rounded-lg transition-colors"
-              >
+              <Button onClick={this.handleReset} className="w-full">
                 Tentar Novamente
-              </button>
-              <button
-                onClick={() => window.location.href = '/products'}
-                className="w-full bg-slate-200 hover:bg-slate-300 text-slate-900 font-medium py-3 rounded-lg transition-colors"
-              >
+              </Button>
+              <Button variant="outline" onClick={() => window.location.href = '/products'} className="w-full">
                 Voltar para Produtos
-              </button>
+              </Button>
             </div>
           </div>
         </div>

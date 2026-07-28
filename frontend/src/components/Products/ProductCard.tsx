@@ -17,7 +17,7 @@ export const ProductCard = ({ product, quantity, onAdd, onRemove }: ProductCardP
         {product.description}
       </p>
       <div className="flex justify-between items-center mb-6">
-        <span className="text-2xl font-bold text-indigo-600">
+        <span className="text-2xl font-bold text-primary-600">
           R$ {product.price.toFixed(2)}
         </span>
       </div>

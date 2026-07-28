@@ -2,6 +2,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import type { ReactNode } from 'react';
 import type { Role } from '../types';
+import { Button } from './ui/Button';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -29,15 +30,15 @@ export const ProtectedRoute = ({
           <p className="text-slate-600 mb-8">
             Você não tem permissão para acessar esta página. Apenas administradores podem acessar.
           </p>
-          <button
+          <Button
             onClick={() => {
               logout();
               navigate('/login');
             }}
-            className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 rounded-lg transition-colors"
+            className="w-full"
           >
             Fazer Login Novamente
-          </button>
+          </Button>
         </div>
       </div>
     );

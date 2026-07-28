@@ -32,7 +32,7 @@ export const OrderCard = ({ order, index }: OrderCardProps) => {
         </span>
       </div>
 
-      <div className="text-2xl font-bold text-indigo-600 mb-6">
+      <div className="text-2xl font-bold text-primary-600 mb-6">
         Total: R$ {order.total.toFixed(2)}
       </div>
 
