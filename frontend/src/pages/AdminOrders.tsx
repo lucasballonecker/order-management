@@ -4,12 +4,12 @@ import type { PaginationParams, PaginationResponse } from '../types/pagination';
 import type { OrderResponse } from '../types/order';
 import { useAuth } from '../hooks/useAuth';
 import { LoadingSpinner } from '../components/ui/LoadingSpinner';
-import { ErrorMessage } from '../components/ui/ErrorMessage';
+import { Alert } from '../components/ui/Alert';
 import { getErrorMessage } from '../utils/errorHandler';
 import type { AdminOrderFilters } from '../components/AdminOrders/FiltersPanel';
 import { FiltersPanel } from '../components/AdminOrders/FiltersPanel';
 import { OrdersTable } from '../components/AdminOrders/OrdersTable';
-import { PaginationBar } from '../components/AdminOrders/PaginationBar';
+import { PaginationControls } from '../components/Products/PaginationControls';
 import { ViewControls } from '../components/AdminOrders/ViewControls';
 
 const applyFilters = (orders: OrderResponse[], filters: AdminOrderFilters) => {
@@ -143,7 +143,7 @@ export const AdminOrders = () => {
         Administração de Pedidos
       </h1>
 
-      {error && <ErrorMessage message={error} />}
+      {error && <Alert type="error" message={error} />}
 
       <FiltersPanel
         filters={filters}
@@ -168,11 +168,11 @@ export const AdminOrders = () => {
             onStatusUpdate={handleStatusUpdate}
           />
 
-          <PaginationBar
-            pagination={pagination}
-            currentPage={params.page}
+          <PaginationControls
+            page={params.page}
+            totalPages={pagination.totalPages}
             loading={loading}
-            setPage={(nextPage: number) => setParams((prev) => ({ ...prev, page: nextPage }))}
+            onPageChange={(nextPage: number) => setParams((prev) => ({ ...prev, page: nextPage }))}
           />
         </div>
       )}
