@@ -140,7 +140,6 @@ public class OrderService {
         );
     }
 
-    @Transactional
     public void updateStatus(Long id, UpdateOrderStatusRequest request) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
 

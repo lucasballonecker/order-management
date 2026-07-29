@@ -227,15 +227,6 @@ public class OrderControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void shouldForbidUpdateOrderStatusWithUserRole() throws Exception {
-        mockMvc.perform(patch("/orders/1/status")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(validUpdateStatusJson()))
-                .andExpect(status().isForbidden());
-    }
-
-    @Test
-    @WithMockUser(roles = "USER")
     public void shouldReturnForbiddenWhenUpdateStatusWithUserRole() throws Exception {
         mockMvc.perform(patch("/orders/1/status")
                         .contentType(MediaType.APPLICATION_JSON)
