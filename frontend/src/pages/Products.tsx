@@ -26,7 +26,6 @@ export const Products = () => {
     sort: 'name,asc'
   });
 
-  
   const [cart, setCart] = useState<Record<number, number>>({});
   const [orderError, setOrderError] = useState('');
   const [orderSuccess, setOrderSuccess] = useState(false);
@@ -42,7 +41,6 @@ export const Products = () => {
         setTotalPages(response.totalPages);
       } catch (err: unknown) {
         setError(getErrorMessage(err, 'Erro ao carregar produtos'));
-        console.error('ProductService.getProducts error:', err);
       } finally {
         setLoading(false);
       }
@@ -90,9 +88,7 @@ export const Products = () => {
       setOrderSuccess(true);
       setCart({});
     } catch (err: unknown) {
-      const message = getErrorMessage(err, 'Erro ao criar pedido');
-      setOrderError(message);
-      console.error('OrderService.createOrder error:', err);
+      setOrderError(getErrorMessage(err, 'Erro ao criar pedido'));
     }
   };
 

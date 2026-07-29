@@ -1,5 +1,7 @@
+import type { Role } from '../types/user';
+
 export interface JwtPayload {
-  sub: string;  
+  sub: string;
   role: string;
   exp: number;
   iat: number;
@@ -25,20 +27,23 @@ export function getEmailFromToken(token: string): string | null {
   return payload?.sub || null;
 }
 
-export function getRoleFromToken(token: string): string | null {
+export function getRoleFromToken(token: string): Role | null {
   const payload = decodeJwt(token);
-  return payload?.role || null;
+  const role = payload?.role;
+  if (role === 'USER' || role === 'ADMIN') {
+    return role;
+  }
+  return null;
 }
 
 export function isTokenExpired(token: string): boolean {
   const payload = decodeJwt(token);
   if (!payload || !payload.exp) {
-    return true; 
+    return true;
   }
-  
-  
+
   const expirationTime = payload.exp * 1000;
   const currentTime = Date.now();
-  
+
   return currentTime >= expirationTime;
 }

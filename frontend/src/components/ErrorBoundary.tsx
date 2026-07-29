@@ -21,7 +21,9 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    if (import.meta.env.DEV) {
+      console.error('ErrorBoundary caught an error:', error, errorInfo);
+    }
   }
 
   handleReset = () => {
@@ -48,10 +50,9 @@ export class ErrorBoundary extends Component<Props, State> {
             </p>
 
             {this.state.error && (
-              <div className="bg-red-50 border border-red-200 text-red-900 px-4 py-3 rounded-lg mb-6 text-sm text-left">
-                <p className="font-semibold mb-2">Detalhes do erro:</p>
-                <p className="break-words">{this.state.error.message}</p>
-              </div>
+              <p className="text-slate-500 text-sm mb-6">
+                Ocorreu um erro inesperado. Atualize a página ou tente novamente mais tarde.
+              </p>
             )}
 
             <div className="flex flex-col gap-3">

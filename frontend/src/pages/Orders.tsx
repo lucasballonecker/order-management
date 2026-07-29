@@ -23,9 +23,7 @@ export const Orders = () => {
         const res = await OrderService.getMyOrders();
         setOrders(res);
       } catch (err: unknown) {
-        const msg = getErrorMessage(err, 'Erro ao carregar pedidos');
-        setError(msg);
-        console.error('OrderService.getMyOrders error:', err);
+        setError(getErrorMessage(err, 'Erro ao carregar pedidos'));
       } finally {
         setLoading(false);
       }
