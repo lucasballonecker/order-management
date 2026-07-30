@@ -29,6 +29,7 @@ export const Products = () => {
   const [cart, setCart] = useState<Record<number, number>>({});
   const [orderError, setOrderError] = useState('');
   const [orderSuccess, setOrderSuccess] = useState(false);
+  const [orderSubmitting, setOrderSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -80,6 +81,7 @@ export const Products = () => {
     if (Object.keys(cart).length === 0) return;
     setOrderError('');
     setOrderSuccess(false);
+    setOrderSubmitting(true);
     try {
       const items: OrderItemRequest[] = Object.entries(cart).map(
         ([id, qty]) => ({ productId: Number(id), quantity: qty })
@@ -89,6 +91,8 @@ export const Products = () => {
       setCart({});
     } catch (err: unknown) {
       setOrderError(getErrorMessage(err, 'Erro ao criar pedido'));
+    } finally {
+      setOrderSubmitting(false);
     }
   };
 
@@ -115,6 +119,7 @@ export const Products = () => {
             cart={cart}
             products={products}
             orderError={orderError}
+            orderSubmitting={orderSubmitting}
             onCreateOrder={createOrder}
           />
 

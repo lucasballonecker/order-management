@@ -6,10 +6,11 @@ interface ShoppingCartProps {
   cart: Record<number, number>;
   products: ProductResponse[];
   orderError: string;
+  orderSubmitting: boolean;
   onCreateOrder: () => void;
 }
 
-export const ShoppingCart = ({ cart, products, orderError, onCreateOrder }: ShoppingCartProps) => {
+export const ShoppingCart = ({ cart, products, orderError, orderSubmitting, onCreateOrder }: ShoppingCartProps) => {
   if (Object.keys(cart).length === 0) return null;
 
   return (
@@ -27,10 +28,9 @@ export const ShoppingCart = ({ cart, products, orderError, onCreateOrder }: Shop
           );
         })}
       </div>
-      <Button onClick={onCreateOrder} className="w-full">
-        Finalizar Pedido
+      <Button onClick={onCreateOrder} loading={orderSubmitting} className="w-full">
+        {orderSubmitting ? 'Finalizando Pedido...' : 'Finalizar Pedido'}
       </Button>
     </div>
   );
 };
-
