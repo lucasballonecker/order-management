@@ -31,7 +31,7 @@ public class UserServiceTest {
     @InjectMocks
     private UserService service;
 
-    private final RegisterUserRequest request = new RegisterUserRequest("John", "john@example.com", "password", Role.USER);
+    private final RegisterUserRequest request = new RegisterUserRequest("John", "john@example.com", "password");
     private final User savedUser = new User(1L, "John", "john@example.com", "encodedPassword", Role.USER);
 
     @Test

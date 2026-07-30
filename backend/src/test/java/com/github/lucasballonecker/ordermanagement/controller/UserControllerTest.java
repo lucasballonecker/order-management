@@ -31,7 +31,7 @@ public class UserControllerTest {
     private UserService userService;
 
     private final ObjectMapper mapper = new ObjectMapper();
-    private final RegisterUserRequest request = new RegisterUserRequest("John", "john@example.com", "password", Role.USER);
+    private final RegisterUserRequest request = new RegisterUserRequest("John", "john@example.com", "password");
     private final UserResponse response = new UserResponse(1L, "John", "john@example.com", Role.USER);
 
     @Test
@@ -45,6 +45,26 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("John"))
                 .andExpect(jsonPath("$.email").value("john@example.com"))
+                .andExpect(jsonPath("$.role").value("USER"));
+    }
+
+    @Test
+    public void shouldIgnoreRoleFromRequestBody() throws Exception {
+        String requestWithAdminRole = """
+                {
+                    "name": "John",
+                    "email": "john@example.com",
+                    "password": "password",
+                    "role": "ADMIN"
+                }
+                """;
+
+        when(userService.register(any(RegisterUserRequest.class))).thenReturn(response);
+
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestWithAdminRole))
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.role").value("USER"));
     }
 

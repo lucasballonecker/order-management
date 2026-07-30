@@ -57,8 +57,7 @@ export const Register = () => {
       await api.post('/users', {
         name,
         email,
-        password,
-        role: 'USER'
+        password
       });
 
       setSuccess(true);
@@ -164,4 +163,3 @@ export const Register = () => {
     </div>
   );
 };
-

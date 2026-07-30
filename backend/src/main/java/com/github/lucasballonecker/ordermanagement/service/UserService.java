@@ -31,7 +31,7 @@ public class UserService {
         user.setName(request.name());
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
-        user.setRole(request.role());
+        user.setRole(Role.USER);
 
         User saved = repository.save(user);
 
