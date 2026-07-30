@@ -11,31 +11,31 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue?style=flat&logo=postgresql)
 ![Docker](https://img.shields.io/badge/Docker-28.0.1-blue?style=flat&logo=docker)
 
-**Aplicação fullstack completa para gerenciamento de pedidos com Spring Boot, React e PostgreSQL**
+**Sistema fullstack para gerenciamento de pedidos com Spring Boot, React e PostgreSQL**
 
 </div>
 
 ## 📋 Sobre
 
-Sistema completo para gerenciamento de pedidos desenvolvido com arquitetura fullstack, combinando um backend robusto em Spring Boot com um frontend moderno em React.
+Sistema para gerenciamento de pedidos desenvolvido com arquitetura fullstack, utilizando Spring Boot no backend e React no frontend.
 
 ### ✅ Features Principais
 
 #### Backend
-- 🔐 **Autenticação JWT** com role-based access control
+- 🔐 **Autenticação JWT** com controle de acesso baseado em roles (RBAC)
 - 📦 **CRUD de Produtos** com paginação e validação
 - 🛒 **Gestão de Pedidos** com múltiplos itens e status
-- 🛡️ **Segurança** com BCrypt e variáveis de ambiente
+- 🛡️ **Segurança** com JWT, BCrypt e variáveis de ambiente
 - 📚 **Documentação** OpenAPI/Swagger
 - 🧪 **Testes** unitários e de integração
 
 #### Frontend
-- 🎨 **Interface moderna** e responsiva com Tailwind CSS
+- 🎨 **Interface** responsiva com Tailwind CSS
 - 🔐 **Autenticação JWT** com Context API
 - 🛒 **Carrinho de compras** integrado
 - 📱 **Design responsivo** para mobile e desktop
 - 🔄 **Rotas protegidas** por role (USER/ADMIN)
-- 📊 **Painel administrativo** para gestão de pedidos
+- 📊 **Painel administrativo** para gerenciamento de pedidos
 - ⚡ **Carregamento otimizado** com Vite
 - 🧪 **Testes** com Vitest e React Testing Library
 
@@ -48,17 +48,17 @@ Sistema completo para gerenciamento de pedidos desenvolvido com arquitetura full
 - Java 17+
 - Maven 3.8+
 - Node.js 20+
-- Docker & Docker Compose
+- Docker Desktop
 
 ### ⚡ Instalação
 
 1. **Clone o projeto**
    ```bash
-   git clone https://github.com/lucasballonecker/order-management-api.git
-   cd order-management-api
+   git clone https://github.com/lucasballonecker/order-management.git
+   cd order-management
    ```
 
-2. **Configure ambiente**
+2. **Configure as variáveis de ambiente**
    
    **Windows (PowerShell):**
    ```powershell
@@ -76,7 +76,7 @@ Sistema completo para gerenciamento de pedidos desenvolvido com arquitetura full
 
 3. **Execute com Docker (Recomendado)**
    ```bash
-   docker-compose up --build
+   docker compose up --build
    ```
    - Carrega automaticamente `backend/.env` para PostgreSQL e o serviço backend
    - Frontend disponível em: http://localhost:5173
@@ -129,8 +129,8 @@ Sistema completo para gerenciamento de pedidos desenvolvido com arquitetura full
 ### Tecnologias
 
 - **Java 17** - Linguagem com records, pattern matching e text blocks
-- **Spring Boot 3.5.9** - Framework para APIs REST robustas
-- **Spring Security 6** - Segurança com autenticação e autorização
+- **Spring Boot 3.5.9** - Framework para APIs REST
+- **Spring Security** - Segurança com autenticação e autorização
 - **JWT** - Tokens para autenticação stateless
 - **BCrypt** - Hash de senhas seguro
 - **PostgreSQL 16** - Banco de dados relacional principal
@@ -138,19 +138,19 @@ Sistema completo para gerenciamento de pedidos desenvolvido com arquitetura full
 - **Flyway** - Migrações de banco de dados versionadas
 - **OpenAPI/Swagger** - Documentação automática da API
 - **Docker** - Containerização da aplicação
-- **JUnit 5, Mockito** - Testes unitários e de integração
+- **JUnit 5 + Mockito** - Testes unitários e de integração
 
 ### Features
 
-- **Autenticação JWT**: Login com tokens de 8 horas de expiração
-- **Role-based Access Control**: Permissões diferenciadas para USER e ADMIN
+- **Autenticação JWT**: Autenticação stateless baseada em tokens
+- **Controle de acesso baseado em roles (RBAC)**: Permissões diferenciadas para USER e ADMIN
 - **CRUD de Produtos**: Gerenciamento com paginação e validações
 - **Gestão de Pedidos**: Pedidos com múltiplos itens e controle de status
-- **Segurança**: Senhas com BCrypt, CORS configurado, variáveis de ambiente
+- **Segurança**: autenticação JWT, BCrypt, CORS e variáveis de ambiente
 - **Documentação**: Swagger UI para teste interativo dos endpoints
 - **Banco de Dados**: PostgreSQL em produção, H2 em desenvolvimento/testes
 - **Migrações**: Flyway para versionamento do schema do banco
-- **Testes**: 51 testes cobrindo validações, segurança e CRUD
+- **Testes**: 50 testes cobrindo controllers, services, validações e segurança
 
 ### Arquitetura
 
@@ -178,12 +178,12 @@ backend/src/main/java/com/github/lucasballonecker/ordermanagement/
 - **Tailwind CSS 4** - Estilização utility-first
 - **React Router DOM 7** - Roteamento e navegação
 - **Axios** - Cliente HTTP com interceptors
-- **Vitest** - Framework de testes unitários
+- **Vitest + React Testing Library** - Testes unitários de componentes
 
 ### Features
 
-- **Autenticação JWT**: Login/register com tokens JWT e refresh automático
-- **Rotas Protegidas**: Acesso restrito baseado em roles (USER/ADMIN)
+- **Autenticação JWT**: Login, logout e persistência da autenticação
+- **Rotas protegidas**: Controle de acesso baseado em roles (USER/ADMIN)
 - **Catálogo de Produtos**: Listagem com paginação e ordenação
 - **Carrinho de Compras**: Adicionar/remover itens antes de finalizar pedido
 - **Gestão de Pedidos**: 
@@ -200,6 +200,7 @@ frontend/src/
 ├── pages/          # Páginas principais (Login, Products, Orders, AdminOrders)
 ├── components/     # Componentes reutilizáveis (Navbar, ProtectedRoute, UI)
 ├── services/       # Serviços de API (productService, orderService)
+├── api/            # Configuração centralizada do Axios
 ├── contexts/       # Context API para estado global (Auth)
 ├── hooks/          # Custom hooks (useAuth)
 ├── types/          # Types TypeScript (auth, product, order, pagination)
@@ -306,37 +307,6 @@ Content-Type: application/json
 
 ---
 
-## 🏗️ Arquitetura
-
-### Backend
-
-```
-src/main/java/com/github/lucasballonecker/ordermanagement/
-├── controller/     # Endpoints REST
-├── service/        # Lógica de negócio
-├── repository/     # Acesso a dados (JPA)
-├── domain/         # Entidades
-├── dto/            # Data Transfer Objects
-├── security/       # JWT e autenticação
-├── config/         # Configurações
-└── shared/         # Utilitários
-```
-
-### Frontend
-
-```
-frontend/src/
-├── pages/          # Páginas principais
-├── components/     # Componentes reutilizáveis
-├── services/       # Serviços de API
-├── contexts/       # Context API
-├── hooks/          # Custom hooks
-├── types/          # Types TypeScript
-├── utils/          # Utilitários
-├── layouts/        # Layouts de página
-└── routes/         # Configuração de rotas
-```
-
 ## 🧪 Testing
 
 ### Backend
@@ -353,7 +323,7 @@ cd backend && ./mvnw test
 ```
 
 **Métricas:**
-- 📊 **51 testes** implementados
+- 📊 **50 testes** implementados
 - 🎯 **Validações** cobertas
 - 🔐 **Segurança** testada
 - 📦 **CRUD** verificado
@@ -378,10 +348,10 @@ cd frontend && npm run test -- --ui
 ```
 
 **Métricas:**
-- 📊 **Testes unitários** para componentes e serviços
-- 🎯 **Cobertura** de funcionalidades principais
+- 📊 **40 testes** implementados
+- 🎯 **Componentes, Context API e utilitários**
 - 🔐 **Autenticação** e rotas protegidas testadas
-- 📦 **Integração** com API verificada
+- 📦 **Fluxos principais da aplicação cobertos**
 
 ---
 
@@ -407,7 +377,7 @@ As variáveis de ambiente do backend são necessárias apenas ao executar com Do
 - **POSTGRES_DB**: Nome do banco de dados PostgreSQL (padrão: orderdb) - *apenas para Docker/Produção*
 - **POSTGRES_USER**: Usuário do banco PostgreSQL (padrão: postgres) - *apenas para Docker/Produção*
 - **POSTGRES_PASSWORD**: Senha do banco PostgreSQL (⚠️ altere em produção) - *apenas para Docker/Produção*
-- **JWT_SECRET**: Chave secreta para tokens JWT (⚠️ gere uma nova para produção) - *necessária em todos os ambientes*
+- **JWT_SECRET**: Chave secreta para tokens JWT (⚠️ gere uma nova para produção) - *necessária em produção; em desenvolvimento usa valor padrão*
 
 #### Frontend (`frontend/.env.local`)
 - **VITE_API_URL**: URL da API Backend (padrão: http://localhost:8080)
@@ -427,17 +397,17 @@ As variáveis de ambiente do backend são necessárias apenas ao executar com Do
 
 ```bash
 # Build e inicia todos os serviços (backend, frontend, database)
-docker-compose up --build
+docker compose up --build
 
 # Em background
-docker-compose up -d
+docker compose up -d
 
 # Logs
-docker-compose logs -f app
-docker-compose logs -f frontend
+docker compose logs -f app
+docker compose logs -f frontend
 
 # Stop
-docker-compose down
+docker compose down
 ```
 
 ### 📋 Serviços
@@ -453,9 +423,10 @@ docker-compose down
 
 ### 🛡️ Implementações
 
-- ✅ **JWT** com expiração de 8 horas
+- ✅ **JWT** para autenticação baseada em tokens
 - ✅ **BCrypt** para hash de senhas
-- ✅ **Role-based access control** (USER/ADMIN)
+- ✅ **Controle de acesso baseado em roles** (USER/ADMIN)
+- ✅ **Role atribuído pelo servidor** — o papel do usuário nunca é enviado pelo cliente durante o cadastro, evitando privilege escalation.
 - ✅ **Variáveis de ambiente** para segredos
 - ✅ **.env no .gitignore**
 - ✅ **CORS** configurado para produção
@@ -465,7 +436,7 @@ docker-compose down
 
 | Recurso | USER | ADMIN |
 |---------|------|-------|
-| Criar pedido | ✅ | ✅ |
+| Criar pedido | ✅ | ❌ |
 | Listar meus pedidos | ✅ | ❌ |
 | Listar todos os pedidos | ❌ | ✅ |
 | Buscar pedido por ID | ✅ | ✅ |
@@ -491,14 +462,6 @@ curl http://localhost:8080/actuator/health
 }
 ```
 
-### 📝 Logs
-
-```properties
-# Níveis de log configurados
-logging.level.com.github.lucasballonecker.ordermanagement=INFO
-logging.level.org.springframework.security=DEBUG
-```
-
 ---
 
 ## 🚀 Deploy
@@ -506,8 +469,8 @@ logging.level.org.springframework.security=DEBUG
 Este projeto está configurado para deploy automatizado:
 
 - **Backend**: Render (Docker + PostgreSQL)
-- **Frontend**: Vercel (SPA com Vite)
-- **CI/CD**: GitHub Actions (build, testes e push Docker)
+- **Frontend**: Vercel
+- **CI/CD**: GitHub Actions para testes, build e automação do pipeline
 
 Para instruções detalhadas de deploy, consulte o [guia de deploy](DEPLOY.md).
 
